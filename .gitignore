@@ -1,1 +1,59 @@
-temp
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Cython 빌드 결과
+*.c
+*.so
+
+# 가상환경
+env/
+venv/
+ENV/
+.venv/
+
+# VSCode 설정 (선택)
+.vscode/
+
+# PyInstaller 빌드 결과
+dist/
+build/
+*.spec
+
+# Jupyter Notebook 체크포인트
+.ipynb_checkpoints
+
+# 테스트 실행 결과
+htmlcov/
+.tox/
+.nox/
+.coverage
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# mypy, pylint, etc.
+.mypy_cache/
+.dmypy.json
+.pyre/
+.pytype/
+
+# IDE 설정 파일 (PyCharm 등)
+.idea/
+*.iml
+
+# 로그 파일
+*.log
+
+# 환경 변수 파일
+.env
+.env.*
+
+# 기타 민감 정보 파일
+secrets.*
+credentials.*
+
+# macOS 시스템 파일
+.DS_Store
