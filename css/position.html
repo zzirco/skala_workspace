@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CSS Position 속성 연습</title>
+  </head>
+  <body
+    style="
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      height: 200vh;
+    "
+  >
+    <h1 style="text-align: center; color: #333">CSS Position 속성 학습</h1>
+
+    <!-- 컨테이너 -->
+    <div
+      style="
+        position: relative;
+        width: 300px;
+        height: 400px;
+        margin: 20px auto;
+        background-color: white;
+        border: 2px solid #ddd;
+        padding: 20px;
+      "
+    >
+      <!-- static 박스 -->
+      <div
+        style="
+          position: static;
+          width: 80px;
+          height: 60px;
+          background-color: #2196f3;
+          color: white;
+          text-align: center;
+          line-height: 60px;
+          margin: 10px;
+        "
+      >
+        static
+      </div>
+
+      <!-- relative 박스 -->
+      <div
+        style="
+          position: relative;
+          width: 80px;
+          height: 60px;
+          background-color: #4caf50;
+          color: white;
+          text-align: center;
+          line-height: 60px;
+          margin: 10px;
+          top: 20px;
+          left: 30px;
+        "
+      >
+        relative
+      </div>
+
+      <!-- absolute 박스 -->
+      <div
+        style="
+          position: absolute;
+          width: 80px;
+          height: 60px;
+          background-color: #ff9800;
+          color: white;
+          text-align: center;
+          line-height: 60px;
+          top: 50px;
+          right: 20px;
+        "
+      >
+        absolute
+      </div>
+
+      <!-- sticky 박스 -->
+      <div
+        style="
+          position: sticky;
+          width: 80px;
+          height: 60px;
+          background-color: #ff5722;
+          color: white;
+          text-align: center;
+          line-height: 60px;
+          margin: 10px;
+          top: 20px;
+        "
+      >
+        sticky
+      </div>
+    </div>
+
+    <!-- fixed 박스 (화면에 고정) -->
+    <div
+      style="
+        position: fixed;
+        width: 100px;
+        height: 60px;
+        background-color: #e91e63;
+        color: white;
+        text-align: center;
+        line-height: 60px;
+        top: 20px;
+        right: 20px;
+        border-radius: 5px;
+      "
+    >
+      fixed
+    </div>
+
+    <!-- 설명 섹션 -->
+    <div
+      style="
+        max-width: 800px;
+        margin: 40px auto;
+        background-color: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      "
+    >
+      <h2
+        style="
+          color: #333;
+          border-bottom: 2px solid #2196f3;
+          padding-bottom: 10px;
+        "
+      >
+        Position 속성 설명
+      </h2>
+
+      <div
+        style="
+          margin: 20px 0;
+          padding: 15px;
+          background-color: #e3f2fd;
+          border-left: 4px solid #2196f3;
+        "
+      >
+        <strong style="color: #2196f3">static (기본값)</strong><br />
+        일반적인 문서 흐름에 따라 배치됩니다. top, right, bottom, left 속성이
+        적용되지 않습니다.
+      </div>
+
+      <div
+        style="
+          margin: 20px 0;
+          padding: 15px;
+          background-color: #e8f5e8;
+          border-left: 4px solid #4caf50;
+        "
+      >
+        <strong style="color: #4caf50">relative</strong><br />
+        원래 위치를 기준으로 상대적으로 이동합니다. 원래 공간은 그대로
+        유지됩니다.
+      </div>
+
+      <div
+        style="
+          margin: 20px 0;
+          padding: 15px;
+          background-color: #fff3e0;
+          border-left: 4px solid #ff9800;
+        "
+      >
+        <strong style="color: #ff9800">absolute</strong><br />
+        가장 가까운 position이 relative인 부모 요소를 기준으로 절대 위치에
+        배치됩니다.
+      </div>
+
+      <div
+        style="
+          margin: 20px 0;
+          padding: 15px;
+          background-color: #fce4ec;
+          border-left: 4px solid #e91e63;
+        "
+      >
+        <strong style="color: #e91e63">fixed</strong><br />
+        뷰포트(브라우저 창)를 기준으로 고정됩니다. 스크롤해도 같은 위치에
+        유지됩니다.
+      </div>
+
+      <div
+        style="
+          margin: 20px 0;
+          padding: 15px;
+          background-color: #ffebee;
+          border-left: 4px solid #ff5722;
+        "
+      >
+        <strong style="color: #ff5722">sticky</strong><br />
+        스크롤 위치에 따라 relative와 fixed 사이를 전환합니다. 지정된 임계점에서
+        고정됩니다.
+      </div>
+    </div>
+
+    <!-- 실습 안내 -->
+    <div
+      style="
+        max-width: 800px;
+        margin: 20px auto;
+        background-color: #fff9c4;
+        padding: 20px;
+        border-radius: 10px;
+        border: 1px solid #f57f17;
+      "
+    >
+      <h3 style="color: #f57f17; margin-top: 0">💡 실습 방법</h3>
+      <ul style="color: #333; line-height: 1.6">
+        <li>
+          페이지를 스크롤해보세요 - <strong>fixed</strong> 박스는 항상 같은
+          위치에 있습니다
+        </li>
+        <li>개발자 도구(F12)를 열어 각 요소의 스타일을 수정해보세요</li>
+        <li>
+          <strong>top, right, bottom, left</strong> 값을 변경해보며 위치 변화를
+          관찰하세요
+        </li>
+        <li>
+          <strong>sticky</strong> 박스는 스크롤할 때 특정 위치에서 고정됩니다
+        </li>
+      </ul>
+    </div>
+
+    <!-- 추가 컨텐츠 (스크롤 테스트용) -->
+    <div
+      style="
+        height: 500px;
+        background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
+        margin: 40px auto;
+        max-width: 800px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+      "
+    >
+      <h2 style="color: #666; text-align: center">
+        스크롤해서 position 속성들의<br />동작을 확인해보세요!
+      </h2>
+    </div>
+  </body>
+</html>

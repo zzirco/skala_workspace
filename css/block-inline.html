@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>블록 요소 기본 스타일</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background-color: #f5f5f5;
+      }
+
+      .container {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+      }
+
+      h2 {
+        color: #333;
+        border-bottom: 2px solid #007bff;
+        padding-bottom: 10px;
+      }
+
+      /* 블록 요소 스타일 */
+      .block-div {
+        background-color: #b3d9ff;
+        padding: 15px;
+        margin: 10px 0;
+        border: 2px dashed #666;
+        border-radius: 5px;
+      }
+
+      /* 인라인 요소로 변경한 div */
+      .inline-div {
+        display: inline;
+        background-color: #90ee90;
+        padding: 10px;
+        margin: 5px;
+        border: 2px solid #666;
+        border-radius: 5px;
+      }
+
+      .explanation {
+        background-color: #fff3cd;
+        border: 1px solid #ffeaa7;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 5px;
+      }
+
+      .highlight {
+        font-weight: bold;
+        color: #d63384;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>블록 요소 기본 스타일</h2>
+      <div class="block-div">블록 스타일 div 1</div>
+      <div class="block-div">블록 스타일 div 2</div>
+
+      <div class="explanation">
+        <strong>블록 요소의 특징:</strong><br />
+        • 각 div가 <span class="highlight">새로운 줄</span>에서 시작<br />
+        • <span class="highlight">전체 너비</span>를 차지<br />
+        • 위아래로 배치됨
+      </div>
+    </div>
+
+    <div class="container">
+      <h2>인라인 스타일로 변경한 div</h2>
+      <div class="inline-div">인라인 스타일 div 1</div>
+      <div class="inline-div">인라인 스타일 div 2</div>
+
+      <div class="explanation">
+        <strong>인라인 요소의 특징:</strong><br />
+        • 같은 줄에 <span class="highlight">나란히 배치</span><br />
+        • <span class="highlight">내용만큼의 너비</span>만 차지<br />
+        • 좌우로 배치됨<br />
+        • 참고: 인라인 요소에서는 상하 margin/padding이 제한적으로 적용됨
+      </div>
+    </div>
+
+    <div class="container">
+      <h2>비교 설명</h2>
+      <p>
+        <strong>블록(Block) 요소:</strong> div, p, h1~h6, ul, li 등<br />
+        - 기본적으로 display: block<br />
+        - 한 줄 전체를 차지하며 세로로 배치<br /><br />
+
+        <strong>인라인(Inline) 요소:</strong> span, a, strong, em 등<br />
+        - 기본적으로 display: inline<br />
+        - 내용만큼의 공간만 차지하며 가로로 배치
+      </p>
+    </div>
+  </body>
+</html>

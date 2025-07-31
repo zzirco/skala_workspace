@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>로그인</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+      }
+      .login-container {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+      }
+      .login-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 15px 15px 0 0;
+      }
+      .form-floating > label {
+        color: #6c757d;
+      }
+      .btn-login {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        padding: 12px;
+        font-weight: 500;
+      }
+      .btn-login:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+      }
+      .social-login {
+        border: 1px solid #dee2e6;
+        color: #495057;
+        transition: all 0.3s ease;
+      }
+      .social-login:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+      .forgot-password {
+        color: #667eea;
+        text-decoration: none;
+      }
+      .forgot-password:hover {
+        color: #764ba2;
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+          <div class="login-container">
+            <!-- 헤더 -->
+            <div class="login-header text-center p-4">
+              <i class="fas fa-user-circle fa-3x mb-3"></i>
+              <h2 class="mb-0">로그인</h2>
+              <p class="mb-0 opacity-75">계정에 로그인하세요</p>
+            </div>
+
+            <!-- 로그인 폼 -->
+            <div class="p-4">
+              <form>
+                <!-- 이메일 입력 -->
+                <div class="form-floating mb-3">
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="email"
+                    placeholder="name@example.com"
+                    required
+                  />
+                  <label for="email"
+                    ><i class="fas fa-envelope me-2"></i>이메일</label
+                  >
+                </div>
+
+                <!-- 비밀번호 입력 -->
+                <div class="form-floating mb-3">
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="password"
+                    placeholder="Password"
+                    required
+                  />
+                  <label for="password"
+                    ><i class="fas fa-lock me-2"></i>비밀번호</label
+                  >
+                </div>
+
+                <!-- 로그인 유지 체크박스 -->
+                <div
+                  class="d-flex justify-content-between align-items-center mb-3"
+                >
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="remember"
+                    />
+                    <label class="form-check-label" for="remember">
+                      로그인 유지
+                    </label>
+                  </div>
+                  <a href="#" class="forgot-password">비밀번호 찾기</a>
+                </div>
+
+                <!-- 로그인 버튼 -->
+                <button
+                  type="submit"
+                  class="btn btn-login btn-primary w-100 mb-3"
+                >
+                  <i class="fas fa-sign-in-alt me-2"></i>로그인
+                </button>
+              </form>
+
+              <!-- 구분선 -->
+              <div class="text-center mb-3">
+                <span class="text-muted">또는</span>
+              </div>
+
+              <!-- 소셜 로그인 -->
+              <div class="d-grid gap-2">
+                <button class="btn social-login">
+                  <i class="fab fa-google text-danger me-2"></i>Google로
+                  계속하기
+                </button>
+                <button class="btn social-login">
+                  <i class="fab fa-facebook text-primary me-2"></i>Facebook으로
+                  계속하기
+                </button>
+              </div>
+
+              <!-- 회원가입 링크 -->
+              <div class="text-center mt-4">
+                <span class="text-muted">계정이 없으신가요? </span>
+                <a href="#" class="forgot-password">회원가입</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // 간단한 폼 제출 이벤트
+      document.querySelector("form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        if (email && password) {
+          alert("로그인 요청이 제출되었습니다!\n이메일: " + email);
+        } else {
+          alert("이메일과 비밀번호를 모두 입력해주세요.");
+        }
+      });
+
+      // 소셜 로그인 버튼 클릭 이벤트
+      document.querySelectorAll(".social-login").forEach((button) => {
+        button.addEventListener("click", function () {
+          const platform = this.textContent.trim().split("로")[0];
+          alert(platform + " 로그인이 요청되었습니다.");
+        });
+      });
+    </script>
+  </body>
+</html>
