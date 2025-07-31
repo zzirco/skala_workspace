@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Travel Album</title>
+   <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .album-container {
+            max-width: 800px;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        .music-player {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .photo-item {
+            flex: 1 1 calc(33.333% - 10px);
+            box-sizing: border-box;
+        }
+        .photo-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        .caption {
+            text-align: center;
+            margin-top: 5px;
+            font-size: 0.9rem;
+            color: #555;
+        }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: #888;
+        }
+   </style>
+</head>
+<body>
+
+    <div class="album-container">
+        <h1>My Unforgettable Journeys ✈️</h1>
+
+        <div class="music-player">
+            <p style="font-size:1.5rem; margin: 0 0 10px 0;">🎵 Background Music</p>
+            <!-- Royalty-free music from https://www.bensound.com -->
+            <audio src="./media/travel-bgm.mp3" autoplay loop controls>
+                오디오 태그를 지원하지 않는 브라우저입니다.
+            </audio>
+            <p style="font-size: 1rem; color: #888; margin: 10px 0 0 0;">
+                (참고: 브라우저 정책에 따라 자동 재생이 안 될 수 있습니다. 그럴 경우 재생 버튼을 눌러주세요.)
+            </p>
+        </div>
+
+        <div class="gallery">
+            <div class="photo-item">
+                <picture>
+                    <source media="(min-width: 800px)" srcset="./media/image2.jpg">
+                    <source media="(min-width: 400px)" srcset="./media/image2.jpg">
+                    <img src="./media/image2.jpg" alt="아름다운 해변">
+                </picture>
+                <div class="caption">#1. 아름다운 노을</div>
+            </div>
+            <div class="photo-item">
+                <picture>
+                    <source media="(min-width: 800px)" srcset="./media/image3.jpg">
+                    <source media="(min-width: 400px)" srcset="./media/image3.jpg">
+                    <img src="./media/image3.jpg" alt="웅장한 산맥">
+                </picture>
+                <div class="caption">#2. 대자연의 품에서</div>
+            </div>
+            <div class="photo-item">
+                <picture>
+                    <source media="(min-width: 800px)" srcset="./media/image4.jpg">
+                    <source media="(min-width: 400px)" srcset="./media/image4.jpg">
+                    <img src="./media/image4.jpg" alt="고즈넉한 도시의 밤">
+                </picture>
+                <div class="caption">#3. 고즈넉한 도시</div>
+            </div>
+        </div>
+
+        <footer>
+            <p>소중한 추억이 담긴 앨범입니다.</p>
+        </footer>
+    </div>
+
+</body>
+</html>
