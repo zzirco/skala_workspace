@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CSS Grid & Flexbox 레이아웃 예제</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Arial", sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      h1 {
+        text-align: center;
+        color: white;
+        margin-bottom: 30px;
+        font-size: 2.5rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .section {
+        background: white;
+        margin-bottom: 40px;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease;
+      }
+
+      .section:hover {
+        transform: translateY(-5px);
+      }
+
+      .section-header {
+        background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+        color: white;
+        padding: 20px;
+        text-align: center;
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+
+      .section-content {
+        padding: 30px;
+      }
+
+      /* CSS Grid 기본 레이아웃 */
+      .grid-basic {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+
+      .grid-item {
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        color: white;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        font-weight: bold;
+        transition: all 0.3s ease;
+      }
+
+      .grid-item:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      /* CSS Grid 복잡한 레이아웃 */
+      .grid-complex {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(3, 100px);
+        gap: 15px;
+      }
+
+      .item-1 {
+        grid-column: 1 / 3;
+        grid-row: 1 / 3;
+        background: linear-gradient(135deg, #ff9a9e, #fecfef);
+      }
+      .item-2 {
+        grid-column: 3 / 5;
+        background: linear-gradient(135deg, #a8edea, #fed6e3);
+      }
+      .item-3 {
+        grid-column: 3 / 4;
+        background: linear-gradient(135deg, #ffecd2, #fcb69f);
+      }
+      .item-4 {
+        grid-column: 4 / 5;
+        background: linear-gradient(135deg, #ff8a80, #ea4c89);
+      }
+      .item-5 {
+        grid-column: 1 / 5;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+      }
+
+      /* Flexbox 기본 레이아웃 */
+      .flex-basic {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+
+      .flex-item {
+        flex: 1;
+        background: linear-gradient(45deg, #11998e, #38ef7d);
+        color: white;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        font-weight: bold;
+        transition: all 0.3s ease;
+      }
+
+      .flex-item:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Flexbox 다양한 정렬 */
+      .flex-alignment {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 120px;
+        background: linear-gradient(135deg, #74b9ff, #0984e3);
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 15px;
+      }
+
+      .align-item {
+        background: white;
+        color: #333;
+        padding: 15px 20px;
+        border-radius: 5px;
+        font-weight: bold;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Grid + Flexbox 조합 레이아웃 */
+      .hybrid-layout {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        grid-template-rows: auto 1fr auto;
+        gap: 20px;
+        height: 400px;
+      }
+
+      .header-section {
+        grid-column: 1 / 3;
+        background: linear-gradient(45deg, #fa709a, #fee140);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        font-size: 1.2rem;
+        font-weight: bold;
+      }
+
+      .main-content {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .sidebar {
+        background: linear-gradient(135deg, #ffecd2, #fcb69f);
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 20px;
+      }
+
+      .sidebar-item {
+        background: white;
+        color: #333;
+        padding: 10px;
+        border-radius: 5px;
+        text-align: center;
+        font-weight: bold;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .footer-section {
+        grid-column: 1 / 3;
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        color: white;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        border-radius: 10px;
+        padding: 15px;
+      }
+
+      .footer-item {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 10px 15px;
+        border-radius: 5px;
+        font-weight: bold;
+      }
+
+      /* 반응형 카드 레이아웃 */
+      .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+      }
+
+      .card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      }
+
+      .card-header {
+        height: 150px;
+        background: linear-gradient(45deg, #ff9a9e, #fecfef, #ffecd2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: white;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+      }
+
+      .card-body {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .card-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #333;
+      }
+
+      .card-content {
+        color: #666;
+        line-height: 1.5;
+      }
+
+      /* 반응형 디자인 */
+      @media (max-width: 768px) {
+        .grid-basic {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .grid-complex {
+          grid-template-columns: 1fr 1fr;
+          grid-template-rows: repeat(4, 80px);
+        }
+
+        .item-1 {
+          grid-column: 1 / 3;
+          grid-row: 1 / 2;
+        }
+        .item-2 {
+          grid-column: 1 / 2;
+          grid-row: 2 / 3;
+        }
+        .item-3 {
+          grid-column: 2 / 3;
+          grid-row: 2 / 3;
+        }
+        .item-4 {
+          grid-column: 1 / 2;
+          grid-row: 3 / 4;
+        }
+        .item-5 {
+          grid-column: 1 / 3;
+          grid-row: 4 / 5;
+        }
+
+        .flex-basic {
+          flex-direction: column;
+        }
+
+        .hybrid-layout {
+          grid-template-columns: 1fr;
+          grid-template-rows: auto auto auto auto;
+          height: auto;
+        }
+
+        .header-section {
+          grid-column: 1;
+        }
+        .footer-section {
+          grid-column: 1;
+        }
+
+        .flex-alignment {
+          flex-direction: column;
+          gap: 10px;
+          height: auto;
+          padding: 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🎨 CSS Grid & Flexbox 레이아웃 예제</h1>
+
+      <!-- CSS Grid 기본 -->
+      <div class="section">
+        <div class="section-header">CSS Grid - 기본 3열 레이아웃</div>
+        <div class="section-content">
+          <div class="grid-basic">
+            <div class="grid-item">Grid Item 1</div>
+            <div class="grid-item">Grid Item 2</div>
+            <div class="grid-item">Grid Item 3</div>
+            <div class="grid-item">Grid Item 4</div>
+            <div class="grid-item">Grid Item 5</div>
+            <div class="grid-item">Grid Item 6</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CSS Grid 복잡한 레이아웃 -->
+      <div class="section">
+        <div class="section-header">CSS Grid - 복잡한 레이아웃</div>
+        <div class="section-content">
+          <div class="grid-complex">
+            <div class="grid-item item-1">Large Item<br />(2x2)</div>
+            <div class="grid-item item-2">Item 2</div>
+            <div class="grid-item item-3">Item 3</div>
+            <div class="grid-item item-4">Item 4</div>
+            <div class="grid-item item-5">Full Width Item</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flexbox 기본 -->
+      <div class="section">
+        <div class="section-header">Flexbox - 기본 균등 분할</div>
+        <div class="section-content">
+          <div class="flex-basic">
+            <div class="flex-item">Flex Item 1</div>
+            <div class="flex-item">Flex Item 2</div>
+            <div class="flex-item">Flex Item 3</div>
+            <div class="flex-item">Flex Item 4</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flexbox 정렬 -->
+      <div class="section">
+        <div class="section-header">Flexbox - 다양한 정렬</div>
+        <div class="section-content">
+          <div class="flex-alignment">
+            <div class="align-item">Left</div>
+            <div class="align-item">Center</div>
+            <div class="align-item">Right</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grid + Flexbox 조합 -->
+      <div class="section">
+        <div class="section-header">Grid + Flexbox 조합 레이아웃</div>
+        <div class="section-content">
+          <div class="hybrid-layout">
+            <div class="header-section">Header Section</div>
+            <div class="main-content">
+              <h3>Main Content Area</h3>
+              <p>Grid로 전체 구조를 만들고, Flexbox로 내부 정렬</p>
+            </div>
+            <div class="sidebar">
+              <div class="sidebar-item">Menu 1</div>
+              <div class="sidebar-item">Menu 2</div>
+              <div class="sidebar-item">Menu 3</div>
+            </div>
+            <div class="footer-section">
+              <div class="footer-item">Footer 1</div>
+              <div class="footer-item">Footer 2</div>
+              <div class="footer-item">Footer 3</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 반응형 카드 레이아웃 -->
+      <div class="section">
+        <div class="section-header">반응형 카드 레이아웃 (Grid + Flexbox)</div>
+        <div class="section-content">
+          <div class="card-grid">
+            <div class="card">
+              <div class="card-header">🎯</div>
+              <div class="card-body">
+                <div class="card-title">목표 달성</div>
+                <div class="card-content">
+                  Grid의 auto-fit과 minmax를 사용한 반응형 카드 레이아웃입니다.
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">⚡</div>
+              <div class="card-body">
+                <div class="card-title">빠른 성능</div>
+                <div class="card-content">
+                  Flexbox로 카드 내부 요소들을 효율적으로 정렬합니다.
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">🎨</div>
+              <div class="card-body">
+                <div class="card-title">아름다운 디자인</div>
+                <div class="card-content">
+                  현대적인 그라디언트와 애니메이션 효과를 적용했습니다.
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header">📱</div>
+              <div class="card-body">
+                <div class="card-title">반응형</div>
+                <div class="card-content">
+                  모든 디바이스에서 완벽하게 작동하는 반응형 레이아웃입니다.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

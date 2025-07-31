@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bootstrap 그리드 레이아웃</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .grid-item {
+        min-height: 150px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: white;
+        margin-bottom: 10px;
+        border-radius: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container mt-4">
+      <!-- 상단 행: 2개의 열 (Primary 색상) -->
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <div class="grid-item bg-primary">Primary Column 1</div>
+        </div>
+        <div class="col-md-6">
+          <div class="grid-item bg-primary">Primary Column 2</div>
+        </div>
+      </div>
+
+      <!-- 하단 행: 3개의 열 (Secondary 색상) -->
+      <div class="row">
+        <div class="col-md-4">
+          <div class="grid-item bg-secondary">Secondary Column 1</div>
+        </div>
+        <div class="col-md-4">
+          <div class="grid-item bg-secondary">Secondary Column 2</div>
+        </div>
+        <div class="col-md-4">
+          <div class="grid-item bg-secondary">Secondary Column 3</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

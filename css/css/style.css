@@ -1,0 +1,12 @@
+h1 {
+  font-size: 36px;
+  color: blue;
+}
+.red-title {
+  font-size: 12px;
+  color: red;
+}
+#first {
+  font-weight: bold;
+  font-size: 48px;
+}

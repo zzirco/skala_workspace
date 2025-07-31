@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flexbox 정렬 예제</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 40px;
+        font-size: 2.5rem;
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .example {
+        margin-bottom: 40px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+      }
+
+      .example:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      .example-title {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        padding: 15px 20px;
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: 600;
+      }
+
+      .flex-container {
+        display: flex;
+        height: 200px;
+        background: #f8f9fa;
+        border: 2px dashed #dee2e6;
+        margin: 20px;
+        position: relative;
+      }
+
+      .box {
+        width: 80px;
+        height: 80px;
+        margin: 5px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .box:hover {
+        transform: scale(1.1);
+      }
+
+      .box1 {
+        background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+      }
+      .box2 {
+        background: linear-gradient(45deg, #4ecdc4, #44a08d);
+      }
+      .box3 {
+        background: linear-gradient(45deg, #45b7d1, #2980b9);
+      }
+
+      .code {
+        background: #2d3748;
+        color: #e2e8f0;
+        padding: 15px;
+        margin: 20px;
+        border-radius: 8px;
+        font-family: "Courier New", monospace;
+        font-size: 0.9rem;
+        overflow-x: auto;
+      }
+
+      /* Flexbox 정렬 예제들 */
+      .justify-start {
+        justify-content: flex-start;
+      }
+      .justify-center {
+        justify-content: center;
+      }
+      .justify-end {
+        justify-content: flex-end;
+      }
+      .justify-between {
+        justify-content: space-between;
+      }
+      .justify-around {
+        justify-content: space-around;
+      }
+      .justify-evenly {
+        justify-content: space-evenly;
+      }
+
+      .align-start {
+        align-items: flex-start;
+      }
+      .align-center {
+        align-items: center;
+      }
+      .align-end {
+        align-items: flex-end;
+      }
+      .align-stretch {
+        align-items: stretch;
+      }
+
+      .direction-column {
+        flex-direction: column;
+      }
+      .direction-row-reverse {
+        flex-direction: row-reverse;
+      }
+      .direction-column-reverse {
+        flex-direction: column-reverse;
+      }
+
+      .wrap {
+        flex-wrap: wrap;
+        height: 120px;
+      }
+      .wrap .box {
+        width: 100px;
+        height: 60px;
+      }
+
+      .align-stretch .box {
+        height: auto;
+      }
+
+      .interactive-controls {
+        background: #f8f9fa;
+        padding: 20px;
+        margin: 20px;
+        border-radius: 8px;
+        border: 2px solid #e9ecef;
+      }
+
+      .control-group {
+        margin-bottom: 15px;
+      }
+
+      .control-group label {
+        display: inline-block;
+        width: 150px;
+        font-weight: 600;
+        color: #495057;
+      }
+
+      select {
+        padding: 8px 12px;
+        border: 2px solid #dee2e6;
+        border-radius: 5px;
+        background: white;
+        color: #495057;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: border-color 0.3s ease;
+      }
+
+      select:focus {
+        outline: none;
+        border-color: #667eea;
+      }
+
+      #interactive-demo {
+        transition: all 0.3s ease;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🎯 Flexbox 정렬 마스터</h1>
+
+      <!-- justify-content 예제들 -->
+      <div class="example">
+        <h2 class="example-title">1. justify-content: flex-start (기본값)</h2>
+        <div class="flex-container justify-start">
+          <div class="box box1">1</div>
+          <div class="box box2">2</div>
+          <div class="box box3">3</div>
+        </div>
+        <div class="code">justify-content: flex-start;</div>
+      </div>
+
+      <div class="example">
+        <h2 class="example-title">2. justify-content: center</h2>
+        <div class="flex-container justify-center">
+          <div class="box box1">1</div>
+          <div class="box box2">2</div>
+          <div class="box box3">3</div>
+        </div>
+        <div class="code">justify-content: center;</div>
+      </div>
+
+      <div class="example">
+        <h2 class="example-title">3. justify-content: flex-end</h2>
+        <div class="flex-container justify-end">
+          <div class="box box1">1</div>
+          <div class="box box2">2</div>
+          <div class="box box3">3</div>
+        </div>
+        <div class="code">justify-content: flex-end;</div>
+      </div>
+
+      <div class="example">
+        <h2 class="example-title">4. justify-content: space-between</h2>
+        <div class="flex-container justify-between">
+          <div class="box box1">1</div>
+          <div class="box box2">2</div>
+          <div class="box box3">3</div>
+        </div>
+        <div class="code">justify-content: space-between;</div>
+      </div>
+
+      <div class="example">
+        <h2 class="example-title">5. justify-content: space-around</h2>
+        <div class="flex-container justify-around">
+          <div class="box box1">1</div>
+          <div class="box box2">2</div>
+          <div class="box box3">3</div>
+        </div>
+        <div class="code">justify-content: space-around;</div>
+      </div>
+
+      <div class="example">
+        <h2 class="example-title">6. justify-content: space-evenly</h2>
+        <div class="flex-container justify-evenly">
+          <div class="box box1">1</div>
+          <div class="box box2">2</div>
+          <div class="box box3">3</div>
+        </div>
+        <div class="code">justify-content: space-evenly;</div>
+      </div>
+
+      <!-- align-items 예제들 -->
+      <div class="example">
+        <h2 class="example-title">7. align-items: flex-start</h2>
+        <div class="flex-container align-start justify-center">
+          <div class="box box1">1</div>
+          <div class="box box2">2</div>
+          <div class="box box3">3</div>
+        </div>
+        <div class="code">align-items: flex-start;</div>
+      </div>
+
+      <div class="example">
+        <h2 class="example-title">8. align-items: center</h2>
+        <div class="flex-container align-center justify-center">
+          <div class="box box1">1</div>
+          <div class="box box2">2</div>
+          <div class="box box3">3</div>
+        </div>
+        <div class="code">align-items: center;</div>
+      </div>
+
+      <div class="example">
+        <h2 class="example-title">9. align-items: flex-end</h2>
+        <div class="flex-container align-end justify-center">
+          <div class="box box1">1</div>
+          <div class="box box2">2</div>
+          <div class="box box3">3</div>
+        </div>
+        <div class="code">align-items: flex-end;</div>
+      </div>
+
+      <div class="example">
+        <h2 class="example-title">10. align-items: stretch</h2>
+        <div class="flex-container align-stretch justify-center">
+          <div class="box box1">1</div>
+          <div class="box box2">2</div>
+          <div class="box box3">3</div>
+        </div>
+        <div class="code">align-items: stretch;</div>
+      </div>
+
+      <!-- flex-direction 예제들 -->
+      <div class="example">
+        <h2 class="example-title">11. flex-direction: column</h2>
+        <div
+          class="flex-container direction-column justify-center align-center"
+        >
+          <div class="box box1">1</div>
+          <div class="box box2">2</div>
+          <div class="box box3">3</div>
+        </div>
+        <div class="code">flex-direction: column;</div>
+      </div>
+
+      <div class="example">
+        <h2 class="example-title">12. flex-direction: row-reverse</h2>
+        <div
+          class="flex-container direction-row-reverse justify-center align-center"
+        >
+          <div class="box box1">1</div>
+          <div class="box box2">2</div>
+          <div class="box box3">3</div>
+        </div>
+        <div class="code">flex-direction: row-reverse;</div>
+      </div>
+
+      <div class="example">
+        <h2 class="example-title">13. flex-wrap: wrap</h2>
+        <div class="flex-container wrap justify-center align-center">
+          <div class="box box1">1</div>
+          <div class="box box2">2</div>
+          <div class="box box3">3</div>
+          <div class="box box1">4</div>
+          <div class="box box2">5</div>
+        </div>
+        <div class="code">flex-wrap: wrap;</div>
+      </div>
+
+      <!-- 인터랙티브 데모 -->
+      <div class="example">
+        <h2 class="example-title">🎮 인터랙티브 데모 - 직접 조작해보세요!</h2>
+        <div class="interactive-controls">
+          <div class="control-group">
+            <label for="justify">justify-content:</label>
+            <select id="justify" onchange="updateDemo()">
+              <option value="flex-start">flex-start</option>
+              <option value="center">center</option>
+              <option value="flex-end">flex-end</option>
+              <option value="space-between">space-between</option>
+              <option value="space-around">space-around</option>
+              <option value="space-evenly">space-evenly</option>
+            </select>
+          </div>
+          <div class="control-group">
+            <label for="align">align-items:</label>
+            <select id="align" onchange="updateDemo()">
+              <option value="stretch">stretch</option>
+              <option value="flex-start">flex-start</option>
+              <option value="center">center</option>
+              <option value="flex-end">flex-end</option>
+            </select>
+          </div>
+          <div class="control-group">
+            <label for="direction">flex-direction:</label>
+            <select id="direction" onchange="updateDemo()">
+              <option value="row">row</option>
+              <option value="column">column</option>
+              <option value="row-reverse">row-reverse</option>
+              <option value="column-reverse">column-reverse</option>
+            </select>
+          </div>
+        </div>
+        <div class="flex-container" id="interactive-demo">
+          <div class="box box1">1</div>
+          <div class="box box2">2</div>
+          <div class="box box3">3</div>
+        </div>
+        <div class="code" id="demo-code">
+          justify-content: flex-start;<br />
+          align-items: stretch;<br />
+          flex-direction: row;
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function updateDemo() {
+        const demo = document.getElementById("interactive-demo");
+        const code = document.getElementById("demo-code");
+
+        const justify = document.getElementById("justify").value;
+        const align = document.getElementById("align").value;
+        const direction = document.getElementById("direction").value;
+
+        demo.style.justifyContent = justify;
+        demo.style.alignItems = align;
+        demo.style.flexDirection = direction;
+
+        code.innerHTML = `
+                justify-content: ${justify};<br>
+                align-items: ${align};<br>
+                flex-direction: ${direction};
+            `;
+      }
+
+      // 페이지 로드 시 초기화
+      document.addEventListener("DOMContentLoaded", function () {
+        updateDemo();
+      });
+    </script>
+  </body>
+</html>

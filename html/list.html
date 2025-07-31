@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <ul style="list-style-type: square;">
+        <li>내가 좋아하는 음식</li>
+        <li>Item 1</li>
+        <li>Item 2</li>
+        <li>Item 3</li>
+    </ul>
+    <ol type="A" start="5">
+        <li>올해 할 일</li>
+        <li>First</li>
+        <li>Second</li>
+        <li>Third</li>
+    </ol>
+    <dl>
+        <dt>나를 설명하는 단어들</dt>
+        <dd>용어와 그 정의의 목록입니다.</dd>
+    </dl>
+    <table border="1">
+        <tr>
+            <th rowspan="2"></th>
+            <th>나이</th>
+            <th>직업</th>
+        </tr>
+        <tr>
+            <td colspan="2">정보없음</td>
+        </tr>
+        <tr>
+            <td>홍길동</td>
+            <td>30</td>
+            <td>개발자</td>
+        </tr>
+    </table>
+
+    <table>                                                        │
+ │     75             <thead>                                                    │
+ │     76                 <tr>                                                   │
+ │     77                     <th>시간</th>                                      │
+ │     78                     <th>월요일</th>                                    │
+ │     79                     <th>화요일</th>                                    │
+ │     80                     <th>수요일</th>                                    │
+ │     81                     <th>목요일</th>                                    │
+ │     82                     <th>금요일</th>                                    │
+ │     83                 </tr>                                                  │
+ │     84             </thead>                                                   │
+ │     85             <tbody>                                                    │
+ │     86                 <tr>                                                   │
+ │     87                     <td class="time">1교시 (09:00-09:50)</td>          │
+ │     88                     <td class="subject-a" rowspan="2">웹 프로그래밍</  │
+ │        td>                                                                    │
+ │     89                     <td class="subject-b">자료구조</td>                │
+ │     90                     <td class="subject-c">컴퓨터 구조</td>             │
+ │     91                     <td class="subject-b">자료구조</td>                │
+ │     92                     <td class="subject-d">운영체제</td>                │
+ │     93                 </tr>                                                  │
+ │     94                 <tr>                                                   │
+ │     95                     <td class="time">2교시 (10:00-10:50)</td>          │
+ │     96                     <!-- 월요일은 rowspan -->                          │
+ │     97                     <td class="subject-d">운영체제</td>                │
+ │     98                     <td class="subject-a">웹 프로그래밍</td>           │
+ │     99                     <td class="subject-c" rowspan="2">컴퓨터 구조</td  │
+ │        >                                                                      │
+ │    100                     <td class="subject-e">알고리즘</td>                │
+ │    101                 </tr>                                                  │
+ │    102                 <tr>                                                   │
+ │    103                     <td class="time">3교시 (11:00-11:50)</td>          │
+ │    104                     <td class="subject-c">컴퓨터 구조</td>             │
+ │    105                     <td class="subject-e">알고리즘</td>                │
+ │    106                     <td class="subject-b">자료구조</td>                │
+ │    107                     <!-- 목요일은 rowspan -->                          │
+ │    108                     <td></td>                                          │
+ │    109                 </tr>                                                  │
+ │    110                 <tr>                                                   │
+ │    111                     <td class="time">12:00-13:00</td>                  │
+ │    112                     <td colspan="5" class="lunch">점심 시간</td>       │
+ │    113                 </tr>                                                  │
+ │    114                 <tr>                                                   │
+ │    115                     <td class="time">4교시 (13:00-13:50)</td>          │
+ │    116                     <td></td>                                          │
+ │    117                     <td class="subject-a">웹 프로그래밍</td>           │
+ │    118                     <td class="subject-e" rowspan="2">알고리즘</td>    │
+ │    119                     <td></td>                                          │
+ │    120                     <td class="subject-b">자료구조</td>                │
+ │    121                 </tr>                                                  │
+ │    122                 <tr>                                                   │
+ │    123                     <td class="time">5교시 (14:00-14:50)</td>          │
+ │    124                     <td class="subject-d">운영체제</td>                │
+ │    125                     <td></td>                                          │
+ │    126                     <!-- 수요일은 rowspan -->                          │
+ │    127                     <td class="subject-a">웹 프로그래밍</td>           │
+ │    128                     <td></td>                                          │
+ │    129                 </tr>                                                  │
+ │    130             </tbody>                                                   │
+ │    131         </table>   
+</body>
+</html>

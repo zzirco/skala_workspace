@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <label for="fruit">과일 선택:</label>
+    <select id="fruit">
+        <option value="apple">사과</option>
+        <option value="banana">바나나</option>
+        <option value="cherry">체리</option>
+        <option value="date">대추야자</option>
+    </select>
+    <div id="selected-fruit"></div>
+
+    <script>
+        const fruitSelect = document.getElementById('fruit');
+        const selectedFruitDiv = document.getElementById('selected-fruit');
+
+        fruitSelect.addEventListener('change', function() {
+            const selectedOption = fruitSelect.options[fruitSelect.selectedIndex];
+            selectedFruitDiv.textContent = '선택한 과일: ' + selectedOption.text;
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Offcanvas Accordion Menu</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
+      crossorigin="anonymous"
+    />
+    <style>
+      .offcanvas-header {
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #dee2e6;
+      }
+
+      .accordion-item {
+        border: none;
+        border-bottom: 1px solid #dee2e6;
+      }
+
+      .accordion-button {
+        background-color: transparent;
+        border: none;
+        font-weight: 500;
+        padding: 1rem 1.25rem;
+      }
+
+      .accordion-button:not(.collapsed) {
+        background-color: #e7f3ff;
+        color: #0d6efd;
+      }
+
+      .accordion-button:focus {
+        box-shadow: none;
+        border-color: transparent;
+      }
+
+      .accordion-body {
+        padding: 0;
+      }
+
+      .sub-menu-item {
+        display: block;
+        padding: 0.75rem 2.5rem;
+        color: #6c757d;
+        text-decoration: none;
+        border-bottom: 1px solid #f8f9fa;
+        transition: all 0.2s ease;
+      }
+
+      .sub-menu-item:hover {
+        background-color: #f8f9fa;
+        color: #495057;
+        text-decoration: none;
+      }
+
+      .main-content {
+        margin-left: 0;
+        transition: margin-left 0.3s ease;
+      }
+
+      .navbar-brand {
+        font-weight: bold;
+      }
+
+      .offcanvas {
+        width: 280px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 상단 네비게이션 바 -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <button
+          class="btn btn-outline-secondary me-3"
+          type="button"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#sidebarOffcanvas"
+          aria-controls="sidebarOffcanvas"
+        >
+          <span class="navbar-toggler-icon"></span>
+          <i class="bi bi-list"></i>menu
+        </button>
+        <a class="navbar-brand" href="#">내 웹사이트</a>
+      </div>
+    </nav>
+
+    <!-- Offcanvas 사이드바 -->
+    <div
+      class="offcanvas offcanvas-start"
+      tabindex="-1"
+      id="sidebarOffcanvas"
+      aria-labelledby="sidebarOffcanvasLabel"
+    >
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="sidebarOffcanvasLabel">메뉴</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="offcanvas"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="offcanvas-body p-0">
+        <!-- Accordion 메뉴 -->
+        <div class="accordion accordion-flush" id="sidebarAccordion">
+          <!-- 상위 메뉴 1 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button
+                class="accordion-button"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#menu1"
+                aria-expanded="true"
+                aria-controls="menu1"
+              >
+                상위 메뉴 1
+              </button>
+            </h2>
+            <div
+              id="menu1"
+              class="accordion-collapse collapse show"
+              data-bs-parent="#sidebarAccordion"
+            >
+              <div class="accordion-body">
+                <a href="#" class="sub-menu-item">하위 메뉴 1-1</a>
+                <a href="#" class="sub-menu-item">하위 메뉴 1-2</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 상위 메뉴 2 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button
+                class="accordion-button collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#menu2"
+                aria-expanded="false"
+                aria-controls="menu2"
+              >
+                상위 메뉴 2
+              </button>
+            </h2>
+            <div
+              id="menu2"
+              class="accordion-collapse collapse"
+              data-bs-parent="#sidebarAccordion"
+            >
+              <div class="accordion-body">
+                <a href="#" class="sub-menu-item">하위 메뉴 2-1</a>
+                <a href="#" class="sub-menu-item">하위 메뉴 2-2</a>
+                <a href="#" class="sub-menu-item">하위 메뉴 2-3</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 상위 메뉴 3 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button
+                class="accordion-button collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#menu3"
+                aria-expanded="false"
+                aria-controls="menu3"
+              >
+                상위 메뉴 3
+              </button>
+            </h2>
+            <div
+              id="menu3"
+              class="accordion-collapse collapse"
+              data-bs-parent="#sidebarAccordion"
+            >
+              <div class="accordion-body">
+                <a href="#" class="sub-menu-item">하위 메뉴 3-1</a>
+                <a href="#" class="sub-menu-item">하위 메뉴 3-2</a>
+                <a href="#" class="sub-menu-item">하위 메뉴 3-3</a>
+                <a href="#" class="sub-menu-item">하위 메뉴 3-4</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 상위 메뉴 4 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button
+                class="accordion-button collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#menu4"
+                aria-expanded="false"
+                aria-controls="menu4"
+              >
+                상위 메뉴 4
+              </button>
+            </h2>
+            <div
+              id="menu4"
+              class="accordion-collapse collapse"
+              data-bs-parent="#sidebarAccordion"
+            >
+              <div class="accordion-body">
+                <a href="#" class="sub-menu-item">하위 메뉴 4-1</a>
+                <a href="#" class="sub-menu-item">하위 메뉴 4-2</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 메인 콘텐츠 영역 -->
+    <div class="main-content">
+      <div class="container-fluid mt-4">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+                <h2>메인 콘텐츠</h2>
+                <p>여기에 웹사이트의 주요 콘텐츠가 표시됩니다.</p>
+                <p>
+                  좌측의 메뉴 버튼을 클릭하여 사이드바를 열고, accordion 메뉴를
+                  사용해보세요.
+                </p>
+
+                <div class="mt-4">
+                  <h4>기능 설명:</h4>
+                  <ul>
+                    <li>Bootstrap 5 Offcanvas를 사용한 슬라이드 사이드바</li>
+                    <li>Accordion 컴포넌트로 구성된 계층 메뉴</li>
+                    <li>반응형 디자인으로 모바일에서도 사용 가능</li>
+                    <li>부드러운 애니메이션 효과</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+      // 메뉴 클릭 시 offcanvas 닫기 (선택사항)
+      document.querySelectorAll(".sub-menu-item").forEach((item) => {
+        item.addEventListener("click", function (e) {
+          e.preventDefault();
+
+          // 선택된 메뉴 표시
+          document
+            .querySelectorAll(".sub-menu-item")
+            .forEach((el) => el.classList.remove("active"));
+          this.classList.add("active");
+
+          // offcanvas 닫기
+          const offcanvasElement = document.getElementById("sidebarOffcanvas");
+          const offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+          if (offcanvas) {
+            offcanvas.hide();
+          }
+
+          console.log("선택된 메뉴:", this.textContent);
+        });
+      });
+    </script>
+  </body>
+</html>

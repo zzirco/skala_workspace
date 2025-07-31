@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주간 강의 시간표</title>
+</head>
+<body>
+
+    <div class="schedule-container">
+        <h1>주간 강의 시간표</h1>
+        <table border="1" cellspacing="0" cellpadding="5">
+            <thead>
+                <tr>
+                    <th>시간</th>
+                    <th>월요일</th>
+                    <th>화요일</th>
+                    <th>수요일</th>
+                    <th>목요일</th>
+                    <th>금요일</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="time">1교시 (09:00-09:50)</td>
+                    <td class="subject-a" rowspan="2">웹 프로그래밍</td>
+                    <td class="subject-b">자료구조</td>
+                    <td class="subject-c">컴퓨터 구조</td>
+                    <td class="subject-b">자료구조</td>
+                    <td class="subject-d">운영체제</td>
+                </tr>
+                <tr>
+                    <td class="time">2교시 (10:00-10:50)</td>
+                    <!-- 월요일은 rowspan -->
+                    <td class="subject-d">운영체제</td>
+                    <td class="subject-a">웹 프로그래밍</td>
+                    <td class="subject-c" rowspan="2">컴퓨터 구조</td>
+                    <td class="subject-e">알고리즘</td>
+                </tr>
+                <tr>
+                    <td class="time">3교시 (11:00-11:50)</td>
+                    <td class="subject-c">컴퓨터 구조</td>
+                    <td class="subject-e">알고리즘</td>
+                    <td class="subject-b">자료구조</td>
+                    <!-- 목요일은 rowspan -->
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="time">점심시간(12:00-13:00)</td>
+                    <td colspan="5" class="lunch">점심 시간</td>
+                </tr>
+                <tr>
+                    <td class="time">4교시 (13:00-13:50)</td>
+                    <td rowspan="2" class="subject-d">운영체제</td>
+                    <td class="subject-a">웹 프로그래밍</td>
+                    <td class="subject-e" rowspan="2">알고리즘</td>
+                    <td></td>
+                    <td class="subject-b">자료구조</td>
+                </tr>
+                <tr>
+                    <td class="time">5교시 (14:00-14:50)</td>
+                    <td rowspan="2" class="subject-d">운영체제</td>
+                    <td></td>
+                    <!-- 수요일은 rowspan -->
+                    <td class="subject-a">웹 프로그래밍</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>
