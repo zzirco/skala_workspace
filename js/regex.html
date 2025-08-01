@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>한글/영어 판별기</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        color: #333;
+      }
+
+      .container {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      h1 {
+        text-align: center;
+        color: #4a5568;
+        margin-bottom: 30px;
+      }
+
+      .input-section {
+        margin-bottom: 30px;
+      }
+
+      input[type="text"] {
+        width: 100%;
+        padding: 15px;
+        font-size: 16px;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        box-sizing: border-box;
+        transition: border-color 0.3s;
+      }
+
+      input[type="text"]:focus {
+        outline: none;
+        border-color: #667eea;
+      }
+
+      .buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+        flex-wrap: wrap;
+      }
+
+      button {
+        flex: 1;
+        padding: 12px 20px;
+        font-size: 14px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s;
+        min-width: 120px;
+      }
+
+      .check-btn {
+        background: #48bb78;
+        color: white;
+      }
+
+      .check-btn:hover {
+        background: #38a169;
+        transform: translateY(-2px);
+      }
+
+      .clear-btn {
+        background: #ed8936;
+        color: white;
+      }
+
+      .clear-btn:hover {
+        background: #dd6b20;
+        transform: translateY(-2px);
+      }
+
+      .demo-btn {
+        background: #667eea;
+        color: white;
+      }
+
+      .demo-btn:hover {
+        background: #5a67d8;
+        transform: translateY(-2px);
+      }
+
+      .result {
+        margin-top: 20px;
+        padding: 20px;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+        transition: all 0.3s;
+      }
+
+      .result.korean {
+        background: #c6f6d5;
+        color: #22543d;
+        border: 2px solid #68d391;
+      }
+
+      .result.english {
+        background: #bee3f8;
+        color: #1a365d;
+        border: 2px solid #63b3ed;
+      }
+
+      .result.mixed {
+        background: #fbb6ce;
+        color: #702459;
+        border: 2px solid #f56565;
+      }
+
+      .console-output {
+        background: #2d3748;
+        color: #e2e8f0;
+        padding: 20px;
+        border-radius: 10px;
+        font-family: "Courier New", monospace;
+        margin-top: 20px;
+        white-space: pre-line;
+        max-height: 200px;
+        overflow-y: auto;
+      }
+
+      .examples {
+        margin-top: 30px;
+        padding: 20px;
+        background: #f7fafc;
+        border-radius: 10px;
+      }
+
+      .examples h3 {
+        color: #4a5568;
+        margin-bottom: 15px;
+      }
+
+      .example-item {
+        margin: 10px 0;
+        padding: 10px;
+        background: white;
+        border-radius: 5px;
+        border-left: 4px solid #667eea;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🔍 한글/영어 판별기</h1>
+
+      <div class="input-section">
+        <input
+          type="text"
+          id="textInput"
+          placeholder="텍스트를 입력하세요 (예: 홍길동, Tom, 안녕Hello)"
+        />
+        <div class="buttons">
+          <button class="check-btn" onclick="checkLanguage()">판별하기</button>
+          <button class="clear-btn" onclick="clearAll()">초기화</button>
+          <button class="demo-btn" onclick="runDemo()">데모 실행</button>
+        </div>
+      </div>
+
+      <div id="result" class="result" style="display: none"></div>
+      <div id="console" class="console-output" style="display: none"></div>
+
+      <div class="examples">
+        <h3>📝 사용 예시</h3>
+        <div class="example-item">
+          <strong>한글:</strong> "홍길동", "안녕하세요", "대한민국"
+        </div>
+        <div class="example-item">
+          <strong>영어:</strong> "Tom", "Hello", "JavaScript"
+        </div>
+        <div class="example-item">
+          <strong>혼합:</strong> "Hello안녕", "Tom김철수", "JS개발자"
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // 한글 판별 함수
+      function isKoreanName(text) {
+        // 한글 유니코드 범위: \uAC00-\uD7AF (가-힣)
+        const koreanRegex = /^[\uAC00-\uD7AF]+$/;
+        return koreanRegex.test(text);
+      }
+
+      // 영어 판별 함수
+      function isEnglishName(text) {
+        // 영어 알파벳만 포함
+        const englishRegex = /^[a-zA-Z]+$/;
+        return englishRegex.test(text);
+      }
+
+      // 한글 포함 여부 확인
+      function containsKorean(text) {
+        const koreanRegex = /[\uAC00-\uD7AF]/;
+        return koreanRegex.test(text);
+      }
+
+      // 영어 포함 여부 확인
+      function containsEnglish(text) {
+        const englishRegex = /[a-zA-Z]/;
+        return englishRegex.test(text);
+      }
+
+      // 언어 판별 메인 함수
+      function checkLanguage() {
+        const input = document.getElementById("textInput").value.trim();
+        const resultDiv = document.getElementById("result");
+        const consoleDiv = document.getElementById("console");
+
+        if (!input) {
+          alert("텍스트를 입력해주세요!");
+          return;
+        }
+
+        let resultText = "";
+        let resultClass = "";
+        let consoleOutput = "";
+
+        // 콘솔 출력 시뮬레이션
+        consoleOutput += `console.log(isKoreanName("${input}")); // ${isKoreanName(
+          input
+        )}\n`;
+        consoleOutput += `console.log(isEnglishName("${input}")); // ${isEnglishName(
+          input
+        )}\n`;
+        consoleOutput += `console.log(containsKorean("${input}")); // ${containsKorean(
+          input
+        )}\n`;
+        consoleOutput += `console.log(containsEnglish("${input}")); // ${containsEnglish(
+          input
+        )}`;
+
+        // 결과 판별
+        if (isKoreanName(input)) {
+          resultText = `✅ "${input}"은(는) 순수 한글입니다!`;
+          resultClass = "korean";
+        } else if (isEnglishName(input)) {
+          resultText = `✅ "${input}"은(는) 순수 영어입니다!`;
+          resultClass = "english";
+        } else if (containsKorean(input) && containsEnglish(input)) {
+          resultText = `⚠️ "${input}"은(는) 한글과 영어가 혼합되어 있습니다!`;
+          resultClass = "mixed";
+        } else if (containsKorean(input)) {
+          resultText = `📝 "${input}"은(는) 한글을 포함하지만 다른 문자도 있습니다.`;
+          resultClass = "mixed";
+        } else if (containsEnglish(input)) {
+          resultText = `📝 "${input}"은(는) 영어를 포함하지만 다른 문자도 있습니다.`;
+          resultClass = "mixed";
+        } else {
+          resultText = `❓ "${input}"은(는) 한글도 영어도 아닙니다.`;
+          resultClass = "mixed";
+        }
+
+        // 결과 표시
+        resultDiv.textContent = resultText;
+        resultDiv.className = `result ${resultClass}`;
+        resultDiv.style.display = "block";
+
+        consoleDiv.textContent = consoleOutput;
+        consoleDiv.style.display = "block";
+      }
+
+      // 초기화 함수
+      function clearAll() {
+        document.getElementById("textInput").value = "";
+        document.getElementById("result").style.display = "none";
+        document.getElementById("console").style.display = "none";
+      }
+
+      // 데모 실행 함수
+      function runDemo() {
+        const examples = [
+          "홍길동",
+          "Tom",
+          "Hello안녕",
+          "123",
+          "JavaScript개발자",
+        ];
+        let index = 0;
+
+        function runNext() {
+          if (index < examples.length) {
+            document.getElementById("textInput").value = examples[index];
+            checkLanguage();
+            index++;
+            setTimeout(runNext, 2000);
+          }
+        }
+
+        runNext();
+      }
+
+      // Enter 키 입력 처리
+      document
+        .getElementById("textInput")
+        .addEventListener("keypress", function (event) {
+          if (event.key === "Enter") {
+            checkLanguage();
+          }
+        });
+
+      // 페이지 로드 시 콘솔에 함수 정의 출력
+      console.log("=== 한글/영어 판별 함수들 ===");
+      console.log("isKoreanName: 순수 한글인지 확인");
+      console.log("isEnglishName: 순수 영어인지 확인");
+      console.log("containsKorean: 한글 포함 여부 확인");
+      console.log("containsEnglish: 영어 포함 여부 확인");
+      console.log("========================");
+    </script>
+  </body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const original = [1, [2, 3], 4];
+      const shallowCopyArray = [...original];
+
+      shallowCopyArray[0] = 10;
+      console.log(original[0], shallowCopyArray[0]);
+
+      shallowCopyArray[1][0] = 20;
+      console.log(original[1][0], shallowCopyArray[1][0]);
+    </script>
+  </body>
+</html>
