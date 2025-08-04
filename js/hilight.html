@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .hilight {
+        font-weight: bold;
+        color: red;
+        background-color: yellow;
+      }
+      .big {
+        font-size: 36px;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <p id="hilight">이 문장을 강조해보세요!</p>
+      <button id="myButton">강조 토글</button>
+    </div>
+    <script>
+      const myButton = document.getElementById("myButton");
+      myButton.addEventListener("click", () => {
+        const p = document.getElementById("hilight");
+        p.classList.toggle("hilight");
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Event Handler</h1>
+    <button id="myButton" onclick="showEvent('클릭')">첫번째 버튼</button>
+    <button id="myButton2">두번째 버튼</button>
+    <button id="myButton3">세번째 버튼</button>
+    <hr />
+    <div id="output" style="border: 1px solid">초기 메세지</div>
+
+    <script>
+      const myButton3 = document.getElementById("myButton3");
+      myButton3.addEventListener("click", () => {
+        const outputDiv = document.getElementById("output");
+        outputDiv.innerHTML = "세번째 버튼 클릭";
+      });
+      myButton3.addEventListener("dblclick", () => {
+        const outputDiv = document.getElementById("output");
+        outputDiv.innerHTML = "세번째 버튼 더블 클릭";
+      });
+      const myButton2 = document.getElementById("myButton2");
+      myButton2.onclick = function () {
+        const outputDiv = document.getElementById("output");
+        outputDiv.innerHTML = "두번째 버튼 클릭";
+      };
+      function showEvent(message) {
+        console.log(message);
+        const outputDiv = document.getElementById("output");
+        outputDiv.innerHTML = message;
+      }
+    </script>
+  </body>
+</html>

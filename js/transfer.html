@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div style="width: 300px; padding: 10px">
+      <h2>홍길동 변신술</h2>
+      <p>변신할 대상을 선택하세요:</p>
+      <div
+        class="radio-group"
+        style="margin-bottom: 20px; display: flex; flex-direction: column"
+      >
+        <label>
+          <input type="radio" name="animal" value="스님" checked />스님
+        </label>
+        <label> <input type="radio" name="animal" value="곰" />곰 </label>
+        <label>
+          <input type="radio" name="animal" value="호랑이" />호랑이
+        </label>
+      </div>
+      <button id="myButton" style="margin-bottom: 20px">변신</button>
+      <div id="output"></div>
+    </div>
+    <script>
+      const myButton = document.getElementById("myButton");
+      myButton.addEventListener("click", () => {
+        const myInput = document.querySelector('input[type="radio"]:checked');
+        const outputDiv = document.getElementById("output");
+        outputDiv.innerHTML = `변신한 대상: ${myInput.value}`;
+      });
+    </script>
+  </body>
+</html>

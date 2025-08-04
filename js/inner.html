@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="html-div">
+      <h2>innerHTML 예제</h2>
+    </div>
+    <div id="text-div">
+      <h2>textContent 예제</h2>
+    </div>
+
+    <input id="input" type="text" value="안녕하세요" />
+
+    <script>
+      const hDiv = document.getElementById("html-div");
+      console.log(hDiv);
+      hDiv.innerHTML = "<strong>안녕하세요</strong>, <em>홍길동</em>입니다.";
+
+      const tDiv = document.getElementById("text-div");
+      console.log(tDiv);
+      tDiv.textContent = "<strong>안녕하세요</strong>, <em>홍길동</em>입니다.";
+
+      const inputMessage = document.getElementById("input");
+      // inputMessage.value = "안녕하세요, 홍길동입니다.";
+      console.log(inputMessage.value);
+    </script>
+  </body>
+</html>

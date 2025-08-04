@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const realHong = {
+        name: "홍길동",
+        age: 25,
+        jobs: "의적",
+        skills: ["검술", "전략", "분신"],
+        shadow: {
+          color: "검은색",
+        },
+      };
+
+      // const fakeHong = { ...realHong };
+      const fakeHong = JSON.parse(JSON.stringify(realHong));
+      const idx = fakeHong.skills.indexOf("분신");
+      fakeHong.skills.splice(idx, 1);
+      delete fakeHong.shadow.color;
+      console.log(realHong);
+      console.log(fakeHong);
+    </script>
+  </body>
+</html>

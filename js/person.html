@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function Person(name, age, skills) {
+        this.name = name;
+        this.age = age;
+        this.skills = skills;
+        this.greet = function (time) {
+          console.log("greet 메서드 호출");
+          return `${time} 안녕하세요, ${this.name}입니다.`;
+        };
+      }
+
+      const person = new Person("홍길동", 25, ["검술", "변신", "월담"]);
+      console.log(person.greet("오전"));
+
+      // const person = {
+      //   name: "홍길동",
+      //   age: 25,
+      //   skills: ["검술", "변신", "월담"],
+      //   greet: function (time) {
+      //     console.log("greet 메서드 호출");
+      //     return `${time} 안녕하세요, ${this.name}입니다.`;
+      //   },
+      // };
+      // console.log(person.greet("오전"));
+
+      // // person2 = new Object();
+      // person2 = {};
+      // person2.name = "홍길동";
+      // person2.age = 25;
+      // person2.skills = ["검술", "변신", "월담"];
+      // person2.greet = function (time) {
+      //   console.log("greet 메서드 호출");
+      //   return `${time} 안녕하세요, ${this.name}입니다.`;
+      // };
+      // console.log(person2.greet("오후"));
+    </script>
+  </body>
+</html>

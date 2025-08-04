@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bootstrap Progress Bar Demo</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .demo-container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 30px;
+      }
+
+      .requirements {
+        background-color: #ffc107;
+        color: #212529;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 30px;
+      }
+
+      .requirements h5 {
+        margin-bottom: 15px;
+        font-weight: bold;
+      }
+
+      .requirements ul {
+        margin-bottom: 0;
+      }
+
+      .requirements li {
+        margin-bottom: 5px;
+      }
+
+      .demo-section {
+        margin-top: 40px;
+      }
+
+      .progress-container {
+        margin: 30px 0;
+      }
+
+      .button-container {
+        margin: 20px 0;
+      }
+
+      #progressValue {
+        font-weight: bold;
+        color: #0d6efd;
+        margin-left: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container demo-container">
+      <h1 class="text-center mb-4">Bootstrap Progress Bar Demo</h1>
+
+      <!-- 요구사항 표시 -->
+      <div class="requirements">
+        <h5>📋 요구사항</h5>
+        <ul>
+          <li>부트스트랩 progress bar와 button 활용</li>
+          <li>startButton을 클릭하면 progress가 1초에 10%씩 증가</li>
+          <li>
+            3초에서 5초 사이로 랜덤으로 생성된 종료 시간이 되면 progress가
+            100%가 되도록 javascript 코드 구성
+          </li>
+        </ul>
+      </div>
+
+      <!-- 데모 섹션 -->
+      <div class="demo-section">
+        <h3>Progress Bar Demo</h3>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span>진행률:</span>
+            <span id="progressValue">0%</span>
+          </div>
+          <div class="progress" style="height: 25px">
+            <div
+              id="progressBar"
+              class="progress-bar progress-bar-striped progress-bar-animated"
+              role="progressbar"
+              style="width: 0%"
+              aria-valuenow="0"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            ></div>
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="button-container">
+          <button id="startButton" class="btn btn-primary btn-lg me-3">
+            시작
+          </button>
+          <button id="resetButton" class="btn btn-secondary btn-lg">
+            초기화
+          </button>
+        </div>
+
+        <!-- 상태 메시지 -->
+        <div id="statusMessage" class="mt-3">
+          <div class="alert alert-info">
+            <strong>상태:</strong> 대기 중... 시작 버튼을 클릭하세요.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+      let progressInterval;
+      let currentProgress = 0;
+      let targetDuration; // 3-5초 사이의 랜덤 시간
+      let isRunning = false;
+
+      const progressBar = document.getElementById("progressBar");
+      const progressValue = document.getElementById("progressValue");
+      const startButton = document.getElementById("startButton");
+      const resetButton = document.getElementById("resetButton");
+      const statusMessage = document.getElementById("statusMessage");
+
+      // 상태 메시지 업데이트 함수
+      function updateStatus(message, type = "info") {
+        statusMessage.innerHTML = `
+                <div class="alert alert-${type}">
+                    <strong>상태:</strong> ${message}
+                </div>
+            `;
+      }
+
+      // Progress Bar 업데이트 함수
+      function updateProgressBar(progress) {
+        progressBar.style.width = progress + "%";
+        progressBar.setAttribute("aria-valuenow", progress);
+        progressValue.textContent = progress + "%";
+      }
+
+      // 시작 버튼 클릭 이벤트
+      startButton.addEventListener("click", function () {
+        if (isRunning) return;
+
+        // 3-5초 사이의 랜덤 시간 설정 (밀리초)
+        targetDuration = Math.random() * (5000 - 3000) + 3000;
+        const targetSeconds = (targetDuration / 1000).toFixed(1);
+
+        updateStatus(`진행 중... (목표 시간: ${targetSeconds}초)`, "warning");
+
+        currentProgress = 0;
+        isRunning = true;
+        startButton.disabled = true;
+
+        // 매 100ms마다 progress 업데이트 (1초에 10%씩 증가하도록 조정)
+        const updateInterval = 100; // ms
+        const progressPerUpdate = (100 / targetDuration) * updateInterval;
+
+        progressInterval = setInterval(function () {
+          currentProgress += progressPerUpdate;
+
+          if (currentProgress >= 100) {
+            currentProgress = 100;
+            updateProgressBar(Math.round(currentProgress));
+            clearInterval(progressInterval);
+            isRunning = false;
+            startButton.disabled = false;
+            updateStatus(
+              "완료! 초기화 버튼을 클릭하여 다시 시작할 수 있습니다.",
+              "success"
+            );
+          } else {
+            updateProgressBar(Math.round(currentProgress));
+          }
+        }, updateInterval);
+      });
+
+      // 초기화 버튼 클릭 이벤트
+      resetButton.addEventListener("click", function () {
+        clearInterval(progressInterval);
+        currentProgress = 0;
+        isRunning = false;
+        startButton.disabled = false;
+        updateProgressBar(0);
+        updateStatus("대기 중... 시작 버튼을 클릭하세요.", "info");
+      });
+    </script>
+  </body>
+</html>

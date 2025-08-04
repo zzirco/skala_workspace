@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const person = {
+        name: "홍길동",
+        age: 25,
+        skills: ["검술", "변신", "월담"],
+        greet: function (time) {
+          console.log("greet 메서드 호출");
+          return `${time} 안녕하세요, ${this.name}입니다.`;
+        },
+      };
+
+      const child = Object.create(person);
+      console.log(person.name, person.age, person.skills, person.greet("오전"));
+      console.log(child.name, child.age, child.skills, child.greet("오전"));
+      // child.name = "임꺽정";
+      // child.age = 36;
+      child.skills = ["도적"];
+      console.log(person.name, person.age, person.skills, person.greet("오전"));
+      console.log(child.name, child.age, child.skills, child.greet("오전"));
+
+      console.log(person.hasOwnProperty("greet"));
+      console.log("name : " + child.hasOwnProperty("name"));
+
+      const message = JSON.stringify(person);
+      const obj = JSON.parse(message);
+      document.write(person + "<br>");
+      document.write(message + "<br>");
+      console.log(message);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>로그인</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="login-container">
+      <h2 class="login-title">로그인</h2>
+
+      <div class="success-message" id="successMessage">
+        로그인이 성공적으로 완료되었습니다! google.com으로 이동합니다...
+      </div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="email">이메일</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="이메일을 입력하세요"
+          />
+          <div class="error-message" id="emailError">
+            이메일 항목을 입력하세요.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">비밀번호</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="비밀번호를 입력하세요"
+          />
+          <div class="error-message" id="passwordError">
+            비밀번호 항목을 입력하세요.
+          </div>
+        </div>
+
+        <button type="submit" class="login-button">로그인</button>
+      </form>
+
+      <div class="redirect-info">
+        입력값 검증이 완료되면 google.com으로 이동합니다
+      </div>
+    </div>
+
+    <script src="validator.js"></script>
+    <script src="login.js"></script>
+  </body>
+</html>
