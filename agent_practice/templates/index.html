@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>README 작성 에이전트</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>README 작성 에이전트</h1>
+      <p class="desc">
+        Git 사용자 정보와 토큰을 입력해 실행하세요. (토큰은 메모리에만 보관,
+        파일 저장 없음)
+      </p>
+
+      <form id="agent-form">
+        <div class="form-group">
+          <label for="repo_url">리포지토리 URL</label>
+          <input
+            type="text"
+            id="repo_url"
+            name="repo_url"
+            placeholder="https://github.com/user/repo.git"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="git_commit_name">GIT_COMMIT_NAME</label>
+          <input
+            type="text"
+            id="git_commit_name"
+            name="git_commit_name"
+            placeholder="홍길동"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="git_commit_email">GIT_COMMIT_EMAIL</label>
+          <input
+            type="email"
+            id="git_commit_email"
+            name="git_commit_email"
+            placeholder="user@example.com"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="github_token">GITHUB_TOKEN</label>
+          <input
+            type="password"
+            id="github_token"
+            name="github_token"
+            placeholder="GitHub Personal Access Token"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="final_filename">README 파일명</label>
+          <input
+            type="text"
+            id="final_filename"
+            name="final_filename"
+            value="README.md"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="branch_name">브랜치 이름 (선택)</label>
+          <input
+            type="text"
+            id="branch_name"
+            name="branch_name"
+            placeholder="feature/readme-update"
+          />
+        </div>
+
+        <div class="form-group checkbox">
+          <input type="checkbox" id="open_pr" name="open_pr" />
+          <label for="open_pr">Pull Request 생성</label>
+        </div>
+
+        <button type="submit" id="run-btn">에이전트 실행</button>
+      </form>
+
+      <!-- 진행 상태 보드 -->
+      <section class="progress-board" aria-live="polite">
+        <h2>진행 상태</h2>
+        <ol id="steps" class="steps">
+          <li data-step="send" class="step">요청 전송</li>
+          <li data-step="clone" class="step">리포지토리 클론</li>
+          <li data-step="analyze" class="step">코드/매니페스트 분석</li>
+          <li data-step="generate" class="step">README 생성</li>
+          <li data-step="commit" class="step">커밋/푸시/PR</li>
+          <li data-step="done" class="step">완료</li>
+        </ol>
+        <div id="global-status" class="global-status">대기 중</div>
+      </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
