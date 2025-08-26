@@ -12,7 +12,7 @@ spec:
     metadata:
       annotations:
         prometheus.io/scrape: 'true'
-        prometheus.io/port: '8080'
+        prometheus.io/port: '8081'
         prometheus.io/path: '/actuator/prometheus'
         update: ${HASHCODE}
       labels:
@@ -28,15 +28,16 @@ spec:
           value: ${USER_NAME}
         - name: NAMESPACE
           value: ${NAMESPACE}
-        - name: SPRING_PROFILES_ACTIVE
-          value: "prod"
+        - name: SPRING_PROFILES_ACTIVE  
+          value: "prod"  
+
+        #PVC를 /app/config로 마운트
         volumeMounts:
-        - name: config-volume
+        - name: efs-config
           mountPath: /app/config
+          readOnly: true
+
       volumes:
-      - name: config-volume
-        configMap:
-          name: ${USER_NAME}-myfirst-configmap
-          items:
-          - key: application-prod.yaml
-            path: application-prod.yaml
+      - name: efs-config
+        persistentVolumeClaim:
+          claimName: ${USER_NAME}-efs-sc-${SERVICE_NAME}-pvc

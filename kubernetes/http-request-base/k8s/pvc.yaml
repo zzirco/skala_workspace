@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sk075-efs-sc-myfirst-api-server-pvc
+  namespace: skala-practice
+spec:
+  accessModes:
+    - ReadWriteMany
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 10Mi
+  storageClassName: efs-sc-shared

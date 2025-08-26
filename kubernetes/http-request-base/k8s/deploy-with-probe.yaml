@@ -30,6 +30,22 @@ spec:
           value: skala-practice
         - name: SPRING_PROFILES_ACTIVE
           value: "prod"
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          failureThreshold: 3
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          failureThreshold: 3
+          timeoutSeconds: 5
         volumeMounts:
         - name: config-volume
           mountPath: /app/config
@@ -40,3 +56,4 @@ spec:
           items:
           - key: application-prod.yaml
             path: application-prod.yaml
+

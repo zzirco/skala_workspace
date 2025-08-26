@@ -24,9 +24,9 @@ logging:
 
 developer:
   owner:
-    name: prod-user
-    role: leader
-    level: senior
+    name: k8s-user
+    role: cloud-export
+    level: cl3
   team:
-    position: skala-prod
-    detail: “team project”
+    position: cloud
+    detail: “3 class”
