@@ -61,3 +61,6 @@ credentials.*
 
 # macOS 시스템 파일
 .DS_Store
+
+# node
+node_modules/

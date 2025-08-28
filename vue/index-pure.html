@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+ <html lang="en">
+ <head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>문자열 삽입</title>
+ </head>
+ <body>
+ <div id="app">
+ <input id="input" placeholder="Enter a message">
+ <p id="message">Message: </p>
+ </div>
+ <script>
+ const input = document.getElementById('input');
+ const message = document.getElementById('message');
+ 
+ input.addEventListener('input', function () {
+ message.textContent = 'Message: ' + input.value;
+ });
+ </script>
+ </body>
+ </html>
