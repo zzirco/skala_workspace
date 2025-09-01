@@ -1,6 +1,6 @@
-<script setup>
-import InputFocus from "./components/InputFocus.Vue";
-</script>
 <template>
-  <InputFocus />
+  <RouterView></RouterView>
 </template>
+<script setup>
+import { RouterView } from "vue-router";
+</script>
