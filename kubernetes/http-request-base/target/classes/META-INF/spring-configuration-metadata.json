@@ -1,0 +1,47 @@
+{
+  "groups": [
+    {
+      "name": "developer",
+      "type": "com.sk.skala.http_request_base.config.DeveloperProperties",
+      "sourceType": "com.sk.skala.http_request_base.config.DeveloperProperties"
+    },
+    {
+      "name": "developer.owner",
+      "type": "com.sk.skala.http_request_base.config.DeveloperProperties$Owner",
+      "sourceType": "com.sk.skala.http_request_base.config.DeveloperProperties"
+    },
+    {
+      "name": "developer.team",
+      "type": "com.sk.skala.http_request_base.config.DeveloperProperties$Team",
+      "sourceType": "com.sk.skala.http_request_base.config.DeveloperProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "developer.owner.level",
+      "type": "java.lang.String",
+      "sourceType": "com.sk.skala.http_request_base.config.DeveloperProperties$Owner"
+    },
+    {
+      "name": "developer.owner.name",
+      "type": "java.lang.String",
+      "sourceType": "com.sk.skala.http_request_base.config.DeveloperProperties$Owner"
+    },
+    {
+      "name": "developer.owner.role",
+      "type": "java.lang.String",
+      "sourceType": "com.sk.skala.http_request_base.config.DeveloperProperties$Owner"
+    },
+    {
+      "name": "developer.team.detail",
+      "type": "java.lang.String",
+      "sourceType": "com.sk.skala.http_request_base.config.DeveloperProperties$Team"
+    },
+    {
+      "name": "developer.team.position",
+      "type": "java.lang.String",
+      "sourceType": "com.sk.skala.http_request_base.config.DeveloperProperties$Team"
+    }
+  ],
+  "hints": []
+}
