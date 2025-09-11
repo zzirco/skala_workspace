@@ -1,0 +1,27 @@
+INSERT INTO address VALUES ('13510','강남구' );
+INSERT INTO address VALUES ('13410','강동구' );
+INSERT INTO address VALUES ('15710','강서구' );
+INSERT INTO address VALUES ('14210','강북구' );
+INSERT INTO address VALUES ('15110','관악구' );
+INSERT INTO address VALUES ('14310','광진구' );
+INSERT INTO address VALUES ('15210','구로구' );
+INSERT INTO address VALUES ('15310','금천구' );
+INSERT INTO address VALUES ('13910','노원구' );
+INSERT INTO address VALUES ('13010','동대문구');
+INSERT INTO address VALUES ('13210','도봉구' );
+INSERT INTO address VALUES ('15610','동작구' );
+INSERT INTO address VALUES ('12110','마포구' );
+INSERT INTO address VALUES ('12010','서대문구');
+INSERT INTO address VALUES ('13360','성동구' );
+INSERT INTO address VALUES ('13610','성북구' );
+INSERT INTO address VALUES ('13710','서초구' );
+INSERT INTO address VALUES ('13810','송파구' );
+INSERT INTO address VALUES ('15010','영등포구');
+INSERT INTO address VALUES ('14010','용산구' );
+INSERT INTO address VALUES ('15810','양천구' );
+INSERT INTO address VALUES ('12210','은평구' );
+INSERT INTO address VALUES ('11010','종로구' );
+INSERT INTO address VALUES ('10010','중구'  );
+INSERT INTO address VALUES ('13110','중랑구' );
+
+commit;
