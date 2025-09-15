@@ -64,3 +64,10 @@ credentials.*
 
 # node
 node_modules/
+
+# fast api practice
+eda-artifacts/
+eda-images/
+ml-images/
+skala-fastapi-rpt/
+mariadb_tmplt/

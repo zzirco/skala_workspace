@@ -1,0 +1,7 @@
+# test-requirements.txt
+# pip install -r test-requirements.txt
+
+pytest
+pytest-asyncio
+httpx
+aiosqlite
