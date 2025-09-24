@@ -27,8 +27,8 @@ from db import CONN_STR
 load_dotenv()
 
 # ============ 0) 공통 LLM/임베딩 ============
-LLM_MODEL = os.getenv("CHAT_MODEL", "gpt-4o-mini")
-EMBED_MODEL = os.getenv("EMBED_MODEL", "text-embedding-3-small")
+LLM_MODEL = os.getenv("CHAT_MODEL", "gpt-4o")
+EMBED_MODEL = os.getenv("EMBED_MODEL", "text-embedding-ada-002")
 
 llm_fast = ChatOpenAI(model=LLM_MODEL, temperature=0)
 llm_careful = ChatOpenAI(model=LLM_MODEL, temperature=0)  # rerank/압축용
