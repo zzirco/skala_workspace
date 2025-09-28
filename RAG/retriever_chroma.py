@@ -1,24 +1,22 @@
-# retriever_pgvector.py
+# retriever_chroma.py
 from typing import Literal, Optional
-from langchain_community.vectorstores import PGVector
+from langchain_chroma import Chroma
 from langchain_openai import OpenAIEmbeddings
-from langchain_core.documents import Document
 from langchain_core.retrievers import BaseRetriever
 
-# connection string은 db.CONN_STR 사용하지 않고 문자열만 받도록 분리
-def build_pgvector_retriever(
-    connection_string: str,
-    collection_name: str = "copyright_chunks",  # chunk 테이블/컬렉션 이름
+def build_chroma_retriever(
+    persist_directory: str = "./chroma_db",
+    collection_name: str = "copyright_chunks",
     search_type: Literal["similarity", "mmr"] = "mmr",
     k: int = 5,
-    fetch_k: int = 25,  # mmr일 때 후보 개수
+    fetch_k: int = 25,
     embedding_model: str = "text-embedding-3-small",
 ) -> BaseRetriever:
     embeddings = OpenAIEmbeddings(model=embedding_model)
-    vs = PGVector(
-        connection_string=connection_string,
-        embedding_function=embeddings,
+    vs = Chroma(
         collection_name=collection_name,
+        persist_directory=persist_directory,
+        embedding_function=embeddings,
     )
     if search_type == "mmr":
         return vs.as_retriever(
