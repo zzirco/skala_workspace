@@ -16,6 +16,7 @@ Lib/
 Scripts/
 share/
 pyvenv.cfg
+venv/
 
 # VSCode 설정 (선택)
 .vscode/
@@ -71,3 +72,6 @@ eda-images/
 ml-images/
 skala-fastapi-rpt/
 mariadb_tmplt/
+
+# Chroma DB files
+chroma_db/
