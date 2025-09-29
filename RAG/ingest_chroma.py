@@ -1,4 +1,3 @@
-# ingest_chroma.py
 import os
 import argparse
 import logging
@@ -21,7 +20,7 @@ TITLE_COL   = os.getenv("TITLE_COL", "사건명")
 CONTENT_COL = os.getenv("CONTENT_COL", "판례내용")
 ID_COL      = os.getenv("ID_COL", "사건번호")
 
-EMBED_MODEL = os.getenv("EMBED_MODEL", "text-embedding-3-small")
+EMBED_MODEL = os.getenv("EMBED_MODEL", "text-embedding-3-large")
 PERSIST_DIR = os.getenv("CHROMA_DIR", "./chroma_db")
 COLLECTION  = os.getenv("CHROMA_COLLECTION", "copyright_chunks")
 

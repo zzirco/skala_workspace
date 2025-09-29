@@ -1,4 +1,3 @@
-# rag_naive.py
 import os
 from typing import Dict, List
 from dotenv import load_dotenv
@@ -13,18 +12,18 @@ from retriever_chroma import build_chroma_retriever
 
 load_dotenv()
 
-LLM_MODEL = os.getenv("CHAT_MODEL", "gpt-4o-mini")
+LLM_MODEL = os.getenv("CHAT_MODEL", "gpt-4o")
 llm = ChatOpenAI(model=LLM_MODEL, temperature=0)
 
 CHROMA_DIR = os.getenv("CHROMA_DIR", "./chroma_db")
 CHROMA_COLLECTION = os.getenv("CHROMA_COLLECTION", "copyright_chunks")
-EMBED_MODEL = os.getenv("EMBED_MODEL", "text-embedding-3-small")
+EMBED_MODEL = os.getenv("EMBED_MODEL", "text-embedding-3-large")
 
 # 단일 retriever (가벼운 기본값)
 retriever = build_chroma_retriever(
     persist_directory=CHROMA_DIR,
     collection_name=CHROMA_COLLECTION,
-    search_type="similarity",  # 나이브: similarity
+    search_type="similarity",
     k=5,
     embedding_model=EMBED_MODEL,
 )

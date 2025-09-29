@@ -75,3 +75,4 @@ mariadb_tmplt/
 
 # Chroma DB files
 chroma_db/
+chroma_db_router/

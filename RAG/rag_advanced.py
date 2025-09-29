@@ -40,13 +40,13 @@ load_dotenv()
 # =========================
 # 0) 공통 설정/LLM
 # =========================
-LLM_MODEL = os.getenv("CHAT_MODEL", "gpt-4o-mini")
-EMBED_MODEL = os.getenv("EMBED_MODEL", "text-embedding-3-small")
+LLM_MODEL = os.getenv("CHAT_MODEL", "gpt-4o")
+EMBED_MODEL = os.getenv("EMBED_MODEL", "text-embedding-3-large")
 
 USE_MULTIQUERY = os.getenv("USE_MULTIQUERY", "true").lower() == "true"
 MULTIQUERY_NUM = int(os.getenv("MULTIQUERY_NUM", "3"))
 
-RETRIEVER_SEARCH_TYPE = os.getenv("RETRIEVER_SEARCH_TYPE", "mmr")  # mmr | similarity
+RETRIEVER_SEARCH_TYPE = os.getenv("RETRIEVER_SEARCH_TYPE", "mmr") 
 RETRIEVER_K = int(os.getenv("RETRIEVER_K", "6"))
 RERANK_TOP_K = int(os.getenv("RERANK_TOP_K", "6"))
 
@@ -92,7 +92,7 @@ CHROMA_COLLECTION = os.getenv("CHROMA_COLLECTION", "copyright_chunks")
 retriever = build_chroma_retriever(
     persist_directory=CHROMA_DIR,
     collection_name=CHROMA_COLLECTION,
-    search_type=RETRIEVER_SEARCH_TYPE,
+    search_type=RETRIEVER_SEARCH_TYPE, # mmr
     k=RETRIEVER_K,
     embedding_model=EMBED_MODEL,
 )
@@ -109,7 +109,7 @@ expansion_prompt = PromptTemplate.from_template(
 )
 
 def build_multiquery_retriever(base_retriever):
-    prompt = expansion_prompt.partial(n=str(MULTIQUERY_NUM))
+    prompt = expansion_prompt.partial(n=str(MULTIQUERY_NUM)) # 3
     return MultiQueryRetriever.from_llm(
         retriever=base_retriever,
         llm=llm_fast,

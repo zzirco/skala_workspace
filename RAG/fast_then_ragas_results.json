@@ -1,0 +1,24 @@
+{
+  "file": "1. 대한법률구조공단_Q&A.xlsx",
+  "count": 5,
+  "pipelines": {
+    "advanced": {
+      "fast_eval_mean": {
+        "fast_answer_relevancy": 0.11623205343377523,
+        "fast_context_alignment": 0.08854916931266518
+      },
+      "ragas_metrics": {},
+      "ragas_samples": 5,
+      "total_valid_samples": 5
+    },
+    "naive": {
+      "fast_eval_mean": {
+        "fast_answer_relevancy": 0.11457552852444022,
+        "fast_context_alignment": 0.09036247757220034
+      },
+      "ragas_metrics": {},
+      "ragas_samples": 5,
+      "total_valid_samples": 5
+    }
+  }
+}
