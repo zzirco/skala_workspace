@@ -76,3 +76,10 @@ mariadb_tmplt/
 # Chroma DB files
 chroma_db/
 chroma_db_router/
+
+AI_Agent/
+
+# 딥러닝 모델
+*.keras*
+*.pkl
+*.joblib
