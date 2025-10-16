@@ -1,0 +1,37 @@
+{
+  "seq_len": 240,
+  "augment_factor": 4,
+  "feature_range": [
+    -1,
+    1
+  ],
+  "model_architecture": {
+    "input_shape": [
+      240,
+      1
+    ],
+    "layers": [
+      "Bidirectional LSTM (128)",
+      "Dropout (0.3)",
+      "Bidirectional LSTM (64)",
+      "Dropout (0.3)",
+      "LSTM (32)",
+      "Dropout (0.2)",
+      "Dense (64, relu)",
+      "Dropout (0.2)",
+      "Dense (32, relu)",
+      "Dense (1)"
+    ]
+  },
+  "training_params": {
+    "optimizer": "Adam",
+    "learning_rate": 0.0005,
+    "loss": "huber",
+    "batch_size": 64
+  },
+  "performance": {
+    "mae": 1.3336702585220337,
+    "rmse": 1.704681634902954,
+    "mape": 1.789286494255066
+  }
+}
