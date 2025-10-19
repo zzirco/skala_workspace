@@ -1,0 +1,19 @@
+{
+  "model_name": "Li_gas_flow_rate",
+  "tool_type": "Lithography",
+  "sensor_name": "Gas_Flow_Rate",
+  "seq_len": 180,
+  "augment_factor": 3,
+  "feature_range": [
+    -1,
+    1
+  ],
+  "original_data_size": 1385,
+  "augmented_data_size": 4155,
+  "performance": {
+    "mae": 2.191798210144043,
+    "rmse": 2.892761707305908,
+    "mape": 5.143303871154785,
+    "epochs_trained": 60
+  }
+}

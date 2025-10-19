@@ -4,7 +4,7 @@ import os
 from pathlib import Path
 
 # 기본 경로 (끝에 '\' 금지). 환경변수 BASE_DIR이 있으면 우선 사용.
-BASE_DIR = Path(os.getenv("BASE_DIR", r"C:\skala_workspace\MLOps\model_serving_win\server")).resolve()
+BASE_DIR = Path(os.getenv("BASE_DIR", r"D:\skala_workspace\MLOps\backend\server")).resolve()
 
 # 디렉터리
 UPLOAD_DIR    = BASE_DIR / "uploaded_files"

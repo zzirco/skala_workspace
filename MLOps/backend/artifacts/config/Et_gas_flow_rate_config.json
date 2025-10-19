@@ -1,0 +1,19 @@
+{
+  "model_name": "Et_gas_flow_rate",
+  "tool_type": "Etching",
+  "sensor_name": "Gas_Flow_Rate",
+  "seq_len": 180,
+  "augment_factor": 3,
+  "feature_range": [
+    -1,
+    1
+  ],
+  "original_data_size": 1418,
+  "augmented_data_size": 4254,
+  "performance": {
+    "mae": 1.9571245908737183,
+    "rmse": 2.646209239959717,
+    "mape": 4.19626522064209,
+    "epochs_trained": 60
+  }
+}

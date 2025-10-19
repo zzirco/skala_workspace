@@ -1052,11 +1052,10 @@ class SemiconductorRAGAgent:
         
         # 1. 데이터 로드 (자동 형식 감지)
         print(f"\n[1/4] 데이터 로드 중... ({os.path.basename(data_file_path)})")
-        df = self.load_data(r"C:\skala_workspace\MLOps\model_serving_win\server_model\semiconductor_quality_control.csv")
+        df = self.load_data(data_file_path)
         
         if df.empty:
-            print("❌ 데이터 로드 실패. 분석을 중단합니다.")
-            return
+            raise ValueError("데이터 로드 실패: 파일을 읽지 못했거나 빈 데이터입니다.")
         
         # 2. EDA 시각화
         print("\n[2/4] EDA 그래프 생성 중...")

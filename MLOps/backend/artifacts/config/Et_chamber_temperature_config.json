@@ -1,0 +1,19 @@
+{
+  "model_name": "Et_chamber_temperature",
+  "tool_type": "Etching",
+  "sensor_name": "Chamber_Temperature",
+  "seq_len": 180,
+  "augment_factor": 3,
+  "feature_range": [
+    -1,
+    1
+  ],
+  "original_data_size": 1418,
+  "augmented_data_size": 4254,
+  "performance": {
+    "mae": 1.02022123336792,
+    "rmse": 1.3660035133361816,
+    "mape": 1.3625357151031494,
+    "epochs_trained": 60
+  }
+}

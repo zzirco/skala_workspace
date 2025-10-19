@@ -1,0 +1,19 @@
+{
+  "model_name": "De_chamber_temperature",
+  "tool_type": "Deposition",
+  "sensor_name": "Chamber_Temperature",
+  "seq_len": 180,
+  "augment_factor": 3,
+  "feature_range": [
+    -1,
+    1
+  ],
+  "original_data_size": 1416,
+  "augmented_data_size": 4248,
+  "performance": {
+    "mae": 0.9166274666786194,
+    "rmse": 1.1710315942764282,
+    "mape": 1.227066993713379,
+    "epochs_trained": 60
+  }
+}

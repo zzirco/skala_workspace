@@ -1,0 +1,4 @@
+sensor,used_base,seq_len,rows_csv,csv,version
+De_chamber_temperature,True,180,3820,D:\skala_workspace\MLOps\backend\artifacts\predictions\De_chamber_temperature_prediction_vol1.csv,vol3
+De_gas_flow_rate,True,180,3820,D:\skala_workspace\MLOps\backend\artifacts\predictions\De_gas_flow_rate_prediction_vol1.csv,vol3
+De_rf_power,True,180,3820,D:\skala_workspace\MLOps\backend\artifacts\predictions\De_rf_power_prediction_vol1.csv,vol3

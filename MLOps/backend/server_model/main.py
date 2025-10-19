@@ -1,17 +1,3 @@
-#### 다음 실습 코드는 학습 목적으로만 사용 바랍니다. 문의 : audit@korea.ac.kr 임성열 Ph.D.
-#### 제공되는 실습 코드는 완성된 버전이 아니며, 일부 이스터 에그 (개선이 필요한 발견 사항)을 포함하고 있습니다.
-
-# pip install fastapi "uvicorn[standard]" pandas pytz python-multipart
-# pip install -U pip wheel
-# pip install matplotlib
-
-'''설치 패키지 설명 :
-# fastapi, uvicorn[standard] : FastAPI를 통한 모델 서빙에 필요, uvicorn[standard]는 의존성 패키지까지 추가 설치
-# pandas: pd (데이터프레임 처리)
-# pytz: 시간대(timezone) 처리
-# python-multipart: 파일 업로드 처리'''
-
-# main.py
 import os
 os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "2")
 
@@ -52,20 +38,18 @@ from .semiconductor_agent import SemiconductorRAGAgent
 # -------------------------------------------------
 # 경로/디렉터리 및 프리픽스(root_path)
 # -------------------------------------------------
-STD_DIR = Path(__file__).resolve().parent.parent  # .../model_serving
-PUBLIC_DIR = STD_DIR / "public"
+BASE_DIR = Path(__file__).resolve().parent          # backend/server_model
+SERVER_DIR = BASE_DIR.parent / "server"             # backend/server
+DATA_DIR = BASE_DIR.parent / "artifacts/predictions"                        # backend/server_model/data
+PUBLIC_DIR = BASE_DIR / "public"
 
-# 프록시 하위 경로에서 서비스할 경우 설정 (예: /api/v2)
-APP_ROOT_PATH = os.getenv("APP_ROOT_PATH", "").rstrip("/")  # 빈 문자열 또는 "/api/v2"
-
-# 데이터 폴더 경로
-DATA_DIR = Path(__file__).resolve().parent / "data"
+UPLOAD_DIR = SERVER_DIR / "uploaded_files"
+IMAGE_DIR = SERVER_DIR / "view-model-architecture"
+MODEL_IMG_DIR = SERVER_DIR / "model-images"
 
 # 타임존
 timezone = pytz.timezone("Asia/Seoul")
-
 router = APIRouter()
-
 load_dotenv()
 
 # -------------------------------------------------
@@ -81,7 +65,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     lifespan=lifespan,
-    root_path=APP_ROOT_PATH,           # ✅ 프리픽스 반영
+    root_path="/",           # ✅ 프리픽스 반영
     docs_url="/docs",
     redoc_url="/redoc",
     openapi_url="/openapi.json",
@@ -93,35 +77,14 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173",
         "http://127.0.0.1:5173",
+        "http://localhost:8001",
+        "http://127.0.0.1:8001",
     ], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["Content-Disposition"],
 )
-
-# /static 경로에 정적 리소스 제공
-app.mount("/static", StaticFiles(directory=str(PUBLIC_DIR)), name="static")
-
-@app.get("/favicon.ico", include_in_schema=False)
-def favicon():
-    ico = PUBLIC_DIR / "favicon.ico"
-    if ico.exists():
-        return FileResponse(str(ico), media_type="image/x-icon")
-    png = PUBLIC_DIR / "favicon.png"
-    if png.exists():
-        return FileResponse(str(png), media_type="image/png")
-    return Response(status_code=204)  # 404 대신 조용히 처리
-
-# 간단한 요청 로그 (디버그용)
-@app.middleware("http")
-async def log_requests(request: Request, call_next):
-    resp: Response
-    try:
-        resp = await call_next(request)
-    finally:
-        # 필요한 경우 상세 로깅 추가
-        pass
-    return resp
 
 # -------------------------------------------------
 # 유틸
@@ -166,167 +129,6 @@ async def _read_sensor_csv_async(file_path: Path) -> pd.DataFrame:
 
     return await asyncio.to_thread(_read)
 
-
-# -------------------------------------------------
-# 헬스체크 / 루트
-# -------------------------------------------------
-@app.get("/health")
-def health():
-    return {"status": "ok", "root_path": APP_ROOT_PATH or "/"}
-
-@app.get("/")
-def root():
-    """
-    index.html을 반환하되, 프리픽스가 있을 경우 <base href=".../">를 주입해
-    정적 자원 경로 문제를 완화합니다.
-    """
-    index_html = PUBLIC_DIR / "index.html"
-    if not index_html.exists():
-        return {"message": "public/index.html not found. Place your frontend under /public or use /static."}
-
-    html = index_html.read_text(encoding="utf-8", errors="ignore")
-
-    rp = APP_ROOT_PATH or "/"
-    # 이미 base가 없다면 <head> 바로 뒤에 주입
-    if "<base" not in html.lower():
-        html = html.replace("<head>", f'<head><base href="{rp if rp.endswith("/") else rp + "/"}">', 1)
-
-    return HTMLResponse(content=html)
-
-# -------------------------------------------------
-# 업로드/예측
-# -------------------------------------------------
-@router.post("/upload")
-async def post_data_set(file: UploadFile = File(...)):
-    """
-    CSV 업로드 → 두 LSTM 모델(weight_used_model, model)로 예측 수행
-    - 무거운 연산은 모두 스레드로 오프로드하여 서버 반응성 유지
-    - 모델 모듈은 요청 시 동적 임포트(스타트업 블로킹 방지)
-    """
-    try:
-        # 1) 저장 경로 구성
-        current_time = datetime.now(timezone).strftime("%Y%m%d_%H%M%S")
-        new_filename = f"{current_time}_{file.filename}"
-        file_location = Path(UPLOAD_DIR) / new_filename
-
-        # 2) 업로드 파일 저장
-        contents = await file.read()
-        await asyncio.to_thread(file_location.write_bytes, contents)
-
-        # 3) CSV 로드
-        dataset = await _read_csv_async(file_location)
-
-        # 4) 모듈 지연 임포트
-        weight_mod = importlib.import_module(".weight_used_model", package=__package__)
-        model_mod = importlib.import_module(".model", package=__package__)
-
-        # 5) 예측 실행 (스레드 오프로드)
-        result_visualizing_LSTM, result_evaluating_LSTM = await asyncio.to_thread(weight_mod.process, dataset)
-        result_visualizing_LSTM_v2, result_evaluating_LSTM_v2 = await asyncio.to_thread(model_mod.process, dataset)
-
-        # 6) 결과 이미지 존재 확인
-        img1 = Path(result_visualizing_LSTM)
-        img2 = Path(result_visualizing_LSTM_v2)
-        if not img1.exists():
-            raise HTTPException(status_code=500, detail=f"File not found: {img1}")
-        if not img2.exists():
-            raise HTTPException(status_code=500, detail=f"File not found: {img2}")
-
-        return {
-            "result_visualizing_LSTM": _b64_png(img1),
-            "result_evaluating_LSTM": result_evaluating_LSTM,
-            "result_visualizing_LSTM_v2": _b64_png(img2),
-            "result_evaluating_LSTM_v2": result_evaluating_LSTM_v2,
-            "saved_filename": new_filename,
-        }
-
-    except FileNotFoundError as e:
-        raise HTTPException(status_code=404, detail=str(e))
-    except HTTPException:
-        raise
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-# -------------------------------------------------
-# 다운로드/뷰
-# -------------------------------------------------
-@router.get("/download")
-async def download():
-    """weight_used_model이 생성한 stock 예측 이미지를 다운로드"""
-    try:
-        weight_mod = importlib.import_module(".weight_used_model", package=__package__)
-        img_name = Path(IMAGE_DIR) / weight_mod.get_stock_png()
-        if not img_name.exists():
-            raise HTTPException(status_code=404, detail=f"File not found: {img_name}")
-        return FileResponse(path=str(img_name), media_type="application/octet-stream", filename="stock.png")
-    except HTTPException:
-        raise
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-@router.get("/download_shapes")
-async def download_model_architecture_shapes():
-    """weight_used_model이 생성한 모델 구조(shapes) 이미지를 다운로드"""
-    try:
-        weight_mod = importlib.import_module(".weight_used_model", package=__package__)
-        img_name = Path(IMAGE_DIR) / weight_mod.get_model_shapes_png()
-        if not img_name.exists():
-            raise HTTPException(status_code=404, detail=f"File not found: {img_name}")
-        return FileResponse(path=str(img_name), media_type="application/octet-stream", filename="model_shapes.png")
-    except HTTPException:
-        raise
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-@router.get("/view-download")
-async def view_downloaded_image():
-    """weight_used_model이 생성한 stock 예측 이미지를 HTML로 보기"""
-    try:
-        weight_mod = importlib.import_module(".weight_used_model", package=__package__)
-        img_name = Path(IMAGE_DIR) / weight_mod.get_stock_png()
-        img_base64 = _b64_png(img_name)
-        return HTMLResponse(
-            content=f"""
-            <html>
-                <body>
-                    <h1>Downloaded Stock Prediction Image</h1>
-                    <img src="{img_base64}" alt="Stock Prediction Image" />
-                </body>
-            </html>
-            """
-        )
-    except HTTPException:
-        raise
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-    
-@router.post("/predict-json")
-async def predict_json(file: UploadFile = File(...)):
-    """
-    CSV 파일을 업로드받아 LSTM 예측 결과를 JSON 형태로 반환합니다.
-    (그래프 이미지를 생성하지 않고, Vue 프론트에서 직접 그래프를 그릴 때 사용)
-    """
-    try:
-        # 파일 저장
-        current_time = datetime.now(timezone).strftime("%Y%m%d_%H%M%S")
-        new_filename = f"{current_time}_{file.filename}"
-        file_location = Path(UPLOAD_DIR) / new_filename
-
-        contents = await file.read()
-        await asyncio.to_thread(file_location.write_bytes, contents)
-
-        # CSV 읽기
-        dataset = await _read_csv_async(file_location)
-
-        # 모델 호출
-        weight_mod = importlib.import_module(".weight_used_model", package=__package__)
-        result_json = await asyncio.to_thread(weight_mod.process_to_json, dataset)
-
-        return result_json
-
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-    
 @router.get("/sensor-data")
 async def get_sensor_data(tool: str):
     """
@@ -400,17 +202,15 @@ async def compare_sensor(sensor: str = "temperature", mode: str = "pred_half"):
     try:
         # ✅ 센서명 → 파일명 매핑 (기존 코드 그대로)
         file_map = {
-            "temperature": "De_chamber_temperature_drift_prediction.csv",
-            "gas": "De_gas_flow_rate_drift_prediction.csv",
-            "pressure": "De_rf_power_drift_prediction.csv",
+            "temperature": "De_chamber_temperature_prediction_vol1.csv",
+            "gas": "De_gas_flow_rate_prediction_vol1.csv",
+            "pressure": "De_rf_power_prediction_vol1.csv",
         }
 
         if sensor not in file_map:
             raise HTTPException(status_code=400, detail=f"Invalid sensor name: {sensor}")
 
-        data_path = Path(
-            rf"C:\skala_workspace\MLOps\model_serving_win\server_model\data\{file_map[sensor]}"
-        )
+        data_path = DATA_DIR / file_map[sensor]
 
         if not data_path.exists():
             raise HTTPException(status_code=404, detail=f"Data file not found: {data_path}")
@@ -419,15 +219,15 @@ async def compare_sensor(sensor: str = "temperature", mode: str = "pred_half"):
         df = pd.read_csv(data_path)
         df.columns = df.columns.str.strip()
 
-        if not {"Timestamp", "predicted", "real"}.issubset(df.columns):
-            raise HTTPException(status_code=400, detail="Missing required columns (Timestamp, predicted, real)")
+        if not {"timestamp", "predicted", "actual"}.issubset(df.columns):
+            raise HTTPException(status_code=400, detail="Missing required columns (timestamp, predicted, actual)")
 
         total_len = len(df)
         half_len = total_len // 2
 
-        timestamps = df["Timestamp"].tolist()
+        timestamps = df["timestamp"].tolist()
         predicted = df["predicted"].tolist()
-        real = df["real"].tolist()
+        real = df["actual"].tolist()
 
         # ✅ mode별 동작 처리
         if mode == "pred_half":
@@ -472,13 +272,19 @@ async def compare_sensor_updated(sensor: str = "temperature"):
     - 기존 데이터는 유지하고, 이 API 호출 시에만 updated CSV를 사용
     """
     try:
+        file_map = {
+            "temperature": "De_chamber_temperature_prediction_vol1.csv",
+            "gas": "De_gas_flow_rate_prediction_vol1.csv",
+            "pressure": "De_rf_power_prediction_vol1.csv",
+        }
+
+        if sensor not in file_map:
+            raise HTTPException(status_code=400, detail=f"Invalid sensor name: {sensor}")
+
+        data_path = DATA_DIR / file_map[sensor]
         # ✅ 원본 및 업데이트 파일 경로
-        base_path = Path(
-            rf"C:\skala_workspace\MLOps\model_serving_win\server_model\data\De_chamber_temperature_drift_prediction.csv"
-        )
-        updated_path = Path(
-            rf"C:\skala_workspace\MLOps\model_serving_win\server_model\data\De_chamber_temperature_drift_prediction_updated.csv"
-        )
+        base_path = data_path
+        updated_path = data_path
 
         if not base_path.exists():
             raise HTTPException(status_code=404, detail=f"Base data not found: {base_path}")
@@ -491,7 +297,7 @@ async def compare_sensor_updated(sensor: str = "temperature"):
         df_base.columns = df_base.columns.str.strip()
         df_new.columns = df_new.columns.str.strip()
 
-        if not {"Timestamp", "predicted", "real"}.issubset(df_base.columns):
+        if not {"timestamp", "predicted", "actual"}.issubset(df_base.columns):
             raise HTTPException(status_code=400, detail="Base file missing required columns.")
         if "predicted" not in df_new.columns:
             raise HTTPException(status_code=400, detail="Updated file missing 'predicted' column.")
@@ -505,9 +311,9 @@ async def compare_sensor_updated(sensor: str = "temperature"):
         df_updated.loc[half_len:, "predicted"] = new_pred_values
 
         # ✅ 그래프 데이터 생성
-        timestamps = df_updated["Timestamp"].tolist()
+        timestamps = df_updated["timestamp"].tolist()
         predicted = df_updated["predicted"].tolist()
-        real = df_updated["real"].tolist() if "real" in df_updated.columns else [None] * total_len
+        real = df_updated["actual"].tolist() if "actual" in df_updated.columns else [None] * total_len
 
         return {
             "sensor": sensor,
@@ -523,23 +329,7 @@ async def compare_sensor_updated(sensor: str = "temperature"):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
-@router.get("/generate-report")
-async def generate_report():
-    """
-    LLM 기반 반도체 예측 분석 리포트 생성 API
-    """
-    try:
-        agent = SemiconductorRAGAgent(knowledge_pdf_paths=["1.pdf", "2.pdf","3.pdf","4.pdf","5.pdf","6.pdf","7.pdf"], force_reembed=False)
-        agent.run_full_analysis(
-            data_file_path="semiconductor_quality_control.csv",
-            output_pdf_path="반도체_분석_보고서4.pdf"
-        )
-        return FileResponse("반도체_분석_보고서4.pdf", media_type="application/pdf", filename="analysis_report.pdf")
-
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
+    
 @router.get("/update-retrained-prediction")
 async def update_retrained_prediction(sensor: str = "temperature"):
     """
@@ -548,12 +338,8 @@ async def update_retrained_prediction(sensor: str = "temperature"):
     """
     try:
         # ✅ 기존 데이터 (compare-sensor용)
-        original_path = Path(
-            r"C:\skala_workspace\MLOps\model_serving_win\server_model\data\De_chamber_temperature_matched.csv"
-        )
-        retrained_path = Path(
-            r"C:\skala_workspace\MLOps\model_serving_win\server_model\data\De_chamber_temperature_drift_prediction.csv"
-        )
+        original_path = DATA_DIR / "De_chamber_temperature_matched.csv"
+        retrained_path = DATA_DIR / "De_chamber_temperature_drift_prediction.csv"
 
         if not original_path.exists() or not retrained_path.exists():
             raise HTTPException(status_code=404, detail="Required data file not found.")
@@ -576,9 +362,7 @@ async def update_retrained_prediction(sensor: str = "temperature"):
         df_updated.loc[half_len:, "predicted"] = df_new["predicted"].values[: total_len - half_len]
 
         # ✅ 새로운 CSV 저장
-        updated_path = (
-            Path(r"C:\skala_workspace\MLOps\model_serving_win\server_model\data\De_chamber_temperature_updated.csv")
-        )
+        updated_path = DATA_DIR / "De_chamber_temperature_updated.csv"
         df_updated.to_csv(updated_path, index=False)
 
         # ✅ 응답 반환
@@ -591,7 +375,320 @@ async def update_retrained_prediction(sensor: str = "temperature"):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+def _format_compare_payload(df: pd.DataFrame, sensor: str, mode: str = "real_full"):
+    """
+    /compare-sensor 형식으로 DataFrame을 직렬화해 반환.
+    df에는 최소 'timestamp', 'predicted' 컬럼이 있어야 하며,
+    'actual'이 없으면 real은 None 리스트로 채움.
+    mode: pred_half | real_half | real_full
+    """
+    # 컬럼 정규화
+    cols = {c.strip().lower(): c for c in df.columns}
+    required_pred = "predicted"
+    ts_key = "timestamp" if "timestamp" in cols else ("date" if "date" in cols else None)
+    if ts_key is None:
+        raise HTTPException(status_code=400, detail="CSV must contain a timestamp-like column (timestamp or date).")
 
+    if required_pred not in cols:
+        raise HTTPException(status_code=400, detail="CSV must contain 'predicted' column.")
+
+    has_actual = "actual" in cols
+
+    # 정렬(가능 시)
+    try:
+        # Timestamp를 파싱 가능한 경우 정렬
+        t = pd.to_datetime(df[cols[ts_key]], errors="coerce")
+        df = df.assign(_ts=t).sort_values("_ts").drop(columns=["_ts"])
+    except Exception:
+        pass
+
+    total_len = len(df)
+    half_len = total_len // 2
+
+    timestamps = df[cols[ts_key]].astype(str).tolist()
+    predicted = df[cols[required_pred]].tolist()
+    if has_actual:
+        real = df[cols["actual"]].tolist()
+    else:
+        real = [None] * total_len
+
+    # mode 적용
+    if mode == "pred_half":
+        timestamps = timestamps[:half_len]
+        predicted = predicted[:half_len]
+        real = [None] * half_len
+    elif mode == "real_half":
+        real_half = real[:half_len]
+        padding = [None] * (total_len - half_len)
+        real = real_half + padding
+    elif mode == "real_full":
+        pass
+    else:
+        raise HTTPException(status_code=400, detail="Invalid mode parameter")
+
+    return {
+        "sensor": sensor,
+        "timestamps": timestamps,
+        "predicted": predicted,
+        "real": real,
+        "info": {
+            "total_points": total_len,
+            "half_points": half_len,
+            "mode": mode,
+        },
+    }
+
+@router.get("/predict-original-model")
+async def predict_original_model(sensor: str = "temperature", mode: str = "real_full"):
+    """
+    기존(재학습 이전) 모델로 예측을 수행하고, 결과 CSV를 저장한 뒤
+    /compare-sensor와 동일 형식(sensor/timestamps/predicted/real/info)으로 응답합니다.
+    mode: pred_half | real_half | real_full (기본 real_full)
+    """
+    try:
+        import importlib
+        inference_mod = importlib.import_module(".inference", package=__package__)
+
+        model_map = {
+            "temperature": {
+                "model": "De_chamber_temperature_model.keras",
+                "scaler": "De_chamber_temperature_scaler.pkl",
+                "config": "De_chamber_temperature_config.json",
+                "input_csv": "data/De_chamber_temperature.csv",
+                "output_csv": "artifacts/predictions/De_chamber_temperature_prediction_vol1.csv",
+            },
+            "gas": {
+                "model": "De_gas_flow_rate_model.keras",
+                "scaler": "De_gas_flow_rate_scaler.pkl",
+                "config": "De_gas_flow_rate_config.json",
+                "input_csv": "data/De_gas_flow_rate.csv",
+                "output_csv": "artifacts/predictions/De_gas_flow_rate_prediction_vol1.csv",
+            },
+            "pressure": {
+                "model": "De_rf_power_model.keras",
+                "scaler": "De_rf_power_scaler.pkl",
+                "config": "De_rf_power_config.json",
+                "input_csv": "data/De_rf_power.csv",
+                "output_csv": "artifacts/predictions/De_rf_power_prediction_vol1.csv",
+            },
+        }
+
+        if sensor not in model_map:
+            raise HTTPException(status_code=400, detail=f"Invalid sensor name: {sensor}")
+
+        base_dir = Path(__file__).resolve().parent.parent
+        artifacts_dir = base_dir / "artifacts"
+        data_dir = base_dir / "server_model" / "data"
+
+        m = model_map[sensor]
+        model_path = artifacts_dir / "model" / m["model"]
+        scaler_path = artifacts_dir / "scaler" / m["scaler"]
+        config_path = artifacts_dir / "config" / m["config"]
+        input_csv = Path(m["input_csv"])
+        output_csv = Path(m["output_csv"])
+
+        if not model_path.exists():
+            raise HTTPException(status_code=404, detail=f"Model file not found: {model_path}")
+        if not scaler_path.exists():
+            raise HTTPException(status_code=404, detail=f"Scaler file not found: {scaler_path}")
+        if not config_path.exists():
+            raise HTTPException(status_code=404, detail=f"Config file not found: {config_path}")
+        if not input_csv.exists():
+            raise HTTPException(status_code=404, detail=f"Input CSV not found: {input_csv}")
+
+        # 예측 수행 (동기 → 스레드)
+        predictor = inference_mod.TemperaturePredictionModel(
+            model_path=str(model_path),
+            scaler_path=str(scaler_path),
+            config_path=str(config_path)
+        )
+        result_df = await asyncio.to_thread(
+            predictor.predict_from_csv,
+            str(input_csv),
+            str(output_csv)
+        )
+
+        # 결과 CSV 보장
+        if not output_csv.exists():
+            raise HTTPException(status_code=500, detail=f"Output CSV not created: {output_csv}")
+
+        # 방금 생성한 CSV를 로드하여 /compare-sensor 포맷으로 직렬화
+        df_out = pd.read_csv(output_csv)
+        # 컬럼 정규화
+        df_out.columns = df_out.columns.str.strip()
+
+        # 일부 파이프라인은 컬럼명이 'Timestamp'로 출력될 수 있으니 보완
+        # 또한 'actual'이 없을 수 있음(그 경우 real은 None으로 채움)
+        payload = _format_compare_payload(df_out, sensor=sensor, mode=mode)
+
+        # 필요하면 상태/메시지 등 메타도 함께 반환하고 싶다면 아래처럼 병합 가능
+        payload["status"] = "ok"
+        payload["message"] = f"Original model inference complete for '{sensor}'"
+        payload["csv_path"] = str(output_csv)
+
+        return payload
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+from fastapi.encoders import jsonable_encoder
+
+MAX_JSON_ROWS_PER_SENSOR = 0  # 0 또는 None이면 전체 행 전송
+
+def _read_csv_as_json(path: str, max_rows: int | None = MAX_JSON_ROWS_PER_SENSOR):
+    import pandas as pd, numpy as np
+    from pathlib import Path
+    p = Path(path)
+    if not p.exists():
+        return {"error": f"CSV not found: {path}", "rows": 0, "records": []}
+    df = pd.read_csv(p)
+    # Timestamp → 문자열 정규화(있으면)
+    if "Timestamp" in df.columns:
+        ts = pd.to_datetime(df["Timestamp"], errors="coerce")
+        df["Timestamp"] = ts.dt.strftime("%Y-%m-%d %H:%M:%S").fillna(df["Timestamp"].astype(str))
+    if max_rows and max_rows > 0:
+        df = df.head(max_rows)
+    df = df.replace({np.nan: None})
+    return {"rows": len(df), "records": df.to_dict(orient="records")}
+    
+@router.post("/retrain")
+async def retrain_models():
+    try:
+        import importlib, asyncio, pandas as pd
+        retrain_mod = importlib.import_module(".retrain", package=__package__)
+        sensors = retrain_mod.SENSORS
+        results = []
+        for s in sensors:
+            res = await asyncio.to_thread(
+                retrain_mod.retrain_one_sensor,
+                s["csv_path"], s["column"], s["artifacts_prefix"]
+            )
+            results.append({
+                "sensor": s["key"],
+                "version": res.get("version"),
+                "csv": str(res.get("csv")),
+                "rows_csv": res.get("rows_csv", None),
+            })
+
+        versions = [r["version"] for r in results if r.get("version")]
+        last_version = max([int(v.replace("vol","")) for v in versions], default=1)
+
+        summary_name = f"retrain_summary_vol{last_version}.csv"
+        summary_path = retrain_mod.ARTIFACTS_DIR / summary_name
+        pd.DataFrame(results).to_csv(summary_path, index=False)
+
+        # ✅ 센서별 CSV → JSON 붙이기
+        data_by_sensor = {}
+        for r in results:
+            data_by_sensor[r["sensor"]] = _read_csv_as_json(r["csv"])
+
+        payload = {
+            "status": "ok",
+            "message": f"All sensors retrained (version {last_version}) successfully.",
+            "results": results,
+            "summary_csv": str(summary_path),
+            "data": data_by_sensor,  # ← 프론트가 한 번에 가져감
+        }
+        return jsonable_encoder(payload)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/generate-report")
+async def generate_report():
+    """
+    LLM 기반 반도체 예측 분석 리포트 생성 API
+    """
+    try:
+        data_dir = Path(r"D:\skala_workspace\MLOps\backend\data")
+        data = sorted(str(p) for p in data_dir.glob("*.pdf"))
+        print("[DEBUG] Knowledge PDFs:", data)
+        agent = SemiconductorRAGAgent(knowledge_pdf_paths=data, force_reembed=True)
+        agent.run_full_analysis(
+            data_file_path="semiconductor_quality_control.csv",
+            output_pdf_path="반도체_분석_보고서4.pdf"
+        )
+        resp = FileResponse(
+            "반도체_분석_보고서4.pdf",
+            media_type="application/pdf",
+            filename="analysis_report.pdf",
+        )
+        # 👇 캐시 방지
+        resp.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+        resp.headers["Pragma"] = "no-cache"
+        resp.headers["Expires"] = "0"
+        return resp
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+from typing import List
+
+@router.post("/upload-and-reembed")
+async def kb_upload_and_reembed(files: List[UploadFile] = File(...)):
+    """
+    여러 개 PDF를 한 번에 업로드하고, update 폴더에 저장한 뒤
+    add_new_documents()로 벡터DB에 즉시 추가(재임베딩)합니다.
+    """
+    try:
+        data_dir   = Path(r"D:\skala_workspace\MLOps\backend\data")
+        update_dir = Path(r"D:\skala_workspace\MLOps\backend\update")
+        update_dir.mkdir(parents=True, exist_ok=True)
+
+        if not files:
+            raise HTTPException(status_code=400, detail="업로드할 파일이 없습니다.")
+
+        saved_paths: list[str] = []
+        errors: list[dict] = []
+
+        # 1) 업로드 저장 (여러 개)
+        for f in files:
+            try:
+                ext = Path(f.filename).suffix.lower()
+                if ext != ".pdf":
+                    raise ValueError(f"PDF만 업로드 가능합니다: {f.filename}")
+
+                ts_name = datetime.now(timezone).strftime("%Y%m%d_%H%M%S_") + f.filename
+                dest = update_dir / ts_name
+
+                content = await f.read()
+                await asyncio.to_thread(dest.write_bytes, content)
+
+                saved_paths.append(str(dest))
+            except Exception as e:
+                errors.append({"file": f.filename, "error": str(e)})
+
+        if not saved_paths and errors:
+            # 모두 실패한 경우
+            raise HTTPException(status_code=400, detail={"message":"모든 파일 업로드 실패", "errors": errors})
+
+        # 2) 에이전트 생성(기존 KB는 유지, 강제 재임베딩 X)
+        base_kb = sorted(p.name for p in data_dir.glob("*.pdf"))  # 기존 코드와 동일하게 name 사용
+        print("[DEBUG] KB base PDFs:", base_kb, flush=True)
+
+        agent = SemiconductorRAGAgent(
+            knowledge_pdf_paths=base_kb,
+            force_reembed=False,  # 기존 임베딩 재사용
+        )
+
+        # 3) 새 문서들 일괄 추가 임베딩 (블로킹 방지)
+        print("[DEBUG] Add new docs:", saved_paths, flush=True)
+        await asyncio.to_thread(agent.add_new_documents, saved_paths)
+
+        # 4) 결과 리턴
+        payload = {
+            "status": "ok",
+            "message": f"{len(saved_paths)}개 문서를 추가했고 벡터DB에 반영했습니다.",
+            "added_files": saved_paths,
+        }
+        if errors:
+            payload["partial_errors"] = errors
+        return payload
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 app.include_router(router)
 

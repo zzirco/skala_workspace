@@ -1,0 +1,19 @@
+{
+  "model_name": "Li_chamber_temperature",
+  "tool_type": "Lithography",
+  "sensor_name": "Chamber_Temperature",
+  "seq_len": 180,
+  "augment_factor": 3,
+  "feature_range": [
+    -1,
+    1
+  ],
+  "original_data_size": 1385,
+  "augmented_data_size": 4155,
+  "performance": {
+    "mae": 1.0220935344696045,
+    "rmse": 1.295007586479187,
+    "mape": 1.3660871982574463,
+    "epochs_trained": 60
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "base_used": true,
+  "seq_len": 180,
+  "retrain_start_idx": 2000,
+  "columns": {
+    "target": "actual"
+  },
+  "version": "vol2"
+}
